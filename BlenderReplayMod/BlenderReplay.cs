@@ -100,8 +100,8 @@ namespace BlenderReplayMod
 
                         _cullers[poolIndex][i] = structure.transform.position.GetHashCode();
 
-                        partialFrame.Add(((byte)poolIndex)); //Structure Type
-                        partialFrame.Add(((byte)i)); // Object Index
+                        partialFrame.Add(((byte)poolIndex)); // Structure Type
+                        partialFrame.Add(((byte)i)); // Object Index, there might be space savings here, but I don't know how to do that and its nicer looking this way.
 
 
                         partialFrame.AddRange(BitConverter.GetBytes(structure.transform.position.x)); // Position X
