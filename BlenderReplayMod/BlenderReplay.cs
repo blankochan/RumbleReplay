@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-
-
 namespace BlenderReplayMod
 {
     public class BlenderReplayModClass : MelonMod
@@ -18,15 +16,15 @@ namespace BlenderReplayMod
 
         public bool Recording;
         public Int16 FrameCounter;
-
+        internal string CurrentScene;
         FileStream _replayFile;
         BinaryWriter _replayWriter;
 
-        public void NewReplay()
+        public void NewReplay(string scene,string localPlayerName = "Unspecified", string remotePlayerName = "Unspecified")
         {
             if (_replayFile != null) { StopReplay(); }
             LoggerInstance.Msg("Recording Started");
-            _replayFile = File.Create($"replays/{Path.GetRandomFileName()}.br"); // TODO Better filename system
+            _replayFile = File.Create($"replays/{localPlayerName}Vs{remotePlayerName}On{scene}-{Path.GetRandomFileName()}.rr"); 
 
             _replayWriter = new BinaryWriter(_replayFile);
             Recording = true; //should get ModUI support for starting/stopping at somepoint 
@@ -43,11 +41,21 @@ namespace BlenderReplayMod
 
 
         }
-        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
+        public override void OnLateInitializeMelon()
+        {
+            Calls.onMapInitialized += MapReady;
+        }
+
+        public override void OnSceneWasLoaded(int buildindex, string sceneName)
+        {
+            CurrentScene = sceneName;
+        }
+        public void MapReady()
         {
             Recording = false;
-            if (sceneName == "Gym" || sceneName == "Map0" || sceneName == "Map1") //remember to replace Gym with Park when everything works
+            if (CurrentScene != "Loader" && CurrentScene != "Park") //remember to replace Gym with Park when everything works
             {
+                MelonLogger.Msg($"Loaded scene: {CurrentScene}");
                 // Setup Pools Into our PoolObjects array
                 _poolObjects[0] = Calls.Pools.Structures.GetPoolBall();
                 _poolObjects[1] = Calls.Pools.Structures.GetPoolBoulderBall();
@@ -73,8 +81,15 @@ namespace BlenderReplayMod
 
                     }
                 }
-
-                NewReplay();
+                if (CurrentScene != "Gym")
+                {
+                    string localPlayer = Calls.Managers.GetPlayerManager().LocalPlayer.Data.GeneralData.PublicUsername;
+                    string remotePlayer = Calls.Players.GetEnemyPlayers()[0].Data.GeneralData.PublicUsername;
+                    MelonLogger.Msg(localPlayer);
+                    MelonLogger.Msg(remotePlayer);
+                   NewReplay(CurrentScene,Regex.Replace(localPlayer, "[^a-zA-Z0-9_ ]", ""),Regex.Replace(remotePlayer, "[^a-zA-Z0-9_ ]", ""));  
+                }
+                else NewReplay(CurrentScene);
             }
             else // put our stop logic here
             {
