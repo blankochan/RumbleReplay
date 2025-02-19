@@ -118,9 +118,9 @@ namespace BlenderReplayMod
                 //Frame Header
                 if (partialFrame.Count != 0)
                 {
-                    _writebuffer.Add(((byte)partialFrame.Count));
-                    _writebuffer.Add(0); // padding/Identifes as a object update frame
+                    _writebuffer.AddRange(BitConverter.GetBytes(((short)partialFrame.Count))); // short in the event it's ever longer than 256 bytes, if a single frame takes 65,536 bytes something is probably wrong
                     _writebuffer.AddRange(BitConverter.GetBytes(FrameCounter));
+                    _writebuffer.Add(0); // UpdateType, currently always 0 because ive yet to program other types, but Type 0 Represents object position/rotation updates 
                     _writebuffer.AddRange(partialFrame);
                 }
 
