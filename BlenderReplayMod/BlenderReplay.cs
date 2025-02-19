@@ -26,7 +26,7 @@ namespace BlenderReplayMod
         {
             if (_replayFile != null) { StopReplay(); }
             LoggerInstance.Msg("Recording Started");
-            _replayFile = File.Create("replays/replayFile.br"); // TODO Better filename system
+            _replayFile = File.Create($"replays/{Path.GetRandomFileName()}.br"); // TODO Better filename system
 
             _replayWriter = new BinaryWriter(_replayFile);
             Recording = true; //should get ModUI support for starting/stopping at somepoint 
