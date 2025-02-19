@@ -20,14 +20,33 @@ namespace BlenderReplayMod
         FileStream _replayFile;
         BinaryWriter _replayWriter;
 
-        public void NewReplay(string scene,string localPlayerName = "Unspecified", string remotePlayerName = "Unspecified")
+        public sealed class ReplayHeader //ignore the warnings about unused variables this gets serialized
         {
+            public string Version = "2.0.0";
+            public string EnemyName { get; set; }
+            public string LocalName { get; set; }
+            public string MapName { get; set; }
+            public string Date = DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss");
+        }
+        public void NewReplay(string scene,string localPlayerName = "", string remotePlayerName = "")
+        {
+            ReplayHeader replayHeader = new ReplayHeader
+            {
+                EnemyName = remotePlayerName,
+                LocalName = localPlayerName,
+                MapName = scene
+            };
+            string header = JsonConvert.SerializeObject(replayHeader);
             if (_replayFile != null) { StopReplay(); }
             LoggerInstance.Msg("Recording Started");
-            _replayFile = File.Create($"replays/{localPlayerName}Vs{remotePlayerName}On{scene}-{Path.GetRandomFileName()}.rr"); 
+            _replayFile = File.Create($"replays/{localPlayerName}-Vs-{remotePlayerName} On {scene}-{Path.GetRandomFileName()}.rr"); 
 
             _replayWriter = new BinaryWriter(_replayFile);
-            Recording = true; //should get ModUI support for starting/stopping at somepoint 
+            byte[] magicBytes = { 0x52, 0x52 }; // 'RR'
+
+            _replayWriter.Write(magicBytes);
+            _replayWriter.Write(header); // json header, first byte is str length
+            Recording = true; //should get ModUI support for starting/stopping at some point 
         }
         public void StopReplay()
         {
