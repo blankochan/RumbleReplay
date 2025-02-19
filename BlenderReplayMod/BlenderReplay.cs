@@ -49,14 +49,14 @@ namespace BlenderReplayMod
             if (sceneName == "Gym" || sceneName == "Map0" || sceneName == "Map1") //remember to replace Gym with Park when everything works
             {
                 // Setup Pools Into our PoolObjects array
-                _poolObjects[0] = RumbleModdingAPI.Calls.Pools.Structures.GetPoolBall();
-                _poolObjects[1] = RumbleModdingAPI.Calls.Pools.Structures.GetPoolBoulderBall();
-                _poolObjects[2] = RumbleModdingAPI.Calls.Pools.Structures.GetPoolCube();
-                _poolObjects[3] = RumbleModdingAPI.Calls.Pools.Structures.GetPoolDisc();
-                _poolObjects[4] = RumbleModdingAPI.Calls.Pools.Structures.GetPoolLargeRock();
-                _poolObjects[5] = RumbleModdingAPI.Calls.Pools.Structures.GetPoolPillar();
-                _poolObjects[6] = RumbleModdingAPI.Calls.Pools.Structures.GetPoolWall();
-                _poolObjects[7] = RumbleModdingAPI.Calls.Pools.Structures.GetPoolSmallRock();
+                _poolObjects[0] = Calls.Pools.Structures.GetPoolBall();
+                _poolObjects[1] = Calls.Pools.Structures.GetPoolBoulderBall();
+                _poolObjects[2] = Calls.Pools.Structures.GetPoolCube();
+                _poolObjects[3] = Calls.Pools.Structures.GetPoolDisc();
+                _poolObjects[4] = Calls.Pools.Structures.GetPoolLargeRock();
+                _poolObjects[5] = Calls.Pools.Structures.GetPoolPillar();
+                _poolObjects[6] = Calls.Pools.Structures.GetPoolWall();
+                _poolObjects[7] = Calls.Pools.Structures.GetPoolSmallRock();
 
                 
                 for (UInt16 poolIndex = 0; poolIndex < _poolObjects.Length; poolIndex++)
