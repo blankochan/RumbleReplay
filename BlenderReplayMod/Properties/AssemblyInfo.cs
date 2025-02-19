@@ -6,7 +6,7 @@ using MelonLoader;
 using BlenderReplayMod; // The namespace of your mod class
 
 // ...
-[assembly: MelonInfo(typeof(BlenderReplayModClass), "BlenderReplay", "0.0.2", "blank")]
+[assembly: MelonInfo(typeof(BlenderReplayModClass), "BlenderReplay", "2.0.0", "blank")]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 [assembly: MelonColor(255, 255, 170, 238)]
 // General Information about an assembly is controlled through the following
