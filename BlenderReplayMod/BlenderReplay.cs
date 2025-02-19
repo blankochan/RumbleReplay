@@ -128,7 +128,7 @@ namespace BlenderReplayMod
 
 
 
-                if (_writebuffer.Count > 1000) //1kb of replay
+                if (_writebuffer.Count >= 1000) //1kb of replay, arbitrary, TODO replace with more complicated more time based logic
                 {
                     foreach (var currentByte in _writebuffer)
                     {
