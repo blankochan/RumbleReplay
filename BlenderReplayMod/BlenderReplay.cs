@@ -51,8 +51,10 @@ namespace BlenderReplayMod
         public void StopReplay()
         {
             if (_replayFile == null) { return; }
-
-            Recording = false; //should get ModUI support for starting/stopping at somepoint
+            _replayWriter.Write(_writebuffer.ToArray());
+            _writebuffer.Clear(); // Write Any Pending Data
+            
+            Recording = false; //should get ModUI support for starting/stopping at some point
             FrameCounter = 0;
             _replayFile.Close();
             _replayFile = null;
