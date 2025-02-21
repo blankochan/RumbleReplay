@@ -79,6 +79,11 @@ namespace RumbleReplay
             _rumbleReplayPreferences = MelonPreferences.CreateCategory("OurFirstCategory");
             
             _playerUpdateInterval = _rumbleReplayPreferences.CreateEntry("Player_Update_Interval", 4);
+            _enabled = _rumbleReplayPreferences.CreateEntry("RecordingEnabled", true);
+            _rumbleReplayPreferences.SaveToFile();
+            
+            LoggerInstance.Msg($"Player_Update_Interval={_playerUpdateInterval.Value}");
+            LoggerInstance.Msg($"Enabled={_enabled.Value}");
         }
         
         public override void OnSceneWasLoaded(int _, string sceneName)
@@ -90,7 +95,7 @@ namespace RumbleReplay
         {
             if (CurrentScene != "Loader" && CurrentScene != "Park" && CurrentScene != "Gym")
             {
-                MelonLogger.Msg($"Loaded scene: {CurrentScene}");
+                LoggerInstance.Msg($"Loaded scene: {CurrentScene}");
                 // Setup Pools Into our PoolObjects array
                 _poolObjects[0] = Calls.Pools.Structures.GetPoolBall();
                 _poolObjects[1] = Calls.Pools.Structures.GetPoolBoulderBall();
@@ -118,8 +123,8 @@ namespace RumbleReplay
                 }
                 string localPlayer = Calls.Managers.GetPlayerManager().LocalPlayer.Data.GeneralData.PublicUsername;
                 string remotePlayer = Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.GeneralData.PublicUsername ?? "Unknown";
-                MelonLogger.Msg(localPlayer);
-                MelonLogger.Msg(remotePlayer);
+                LoggerInstance.Msg(localPlayer);
+                LoggerInstance.Msg(remotePlayer);
                 NewReplay(CurrentScene,Regex.Replace(localPlayer, "[^a-zA-Z0-9_ ]", ""),Regex.Replace(remotePlayer, "[^a-zA-Z0-9_ ]", ""));  
             }
             else // put our stop logic here
