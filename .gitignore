@@ -1,5 +1,6 @@
 /refs
-/BlenderReplayMod/bin
-/BlenderReplayMod/.idea
-/BlenderReplayMod/.vs
-/BlenderReplayMod/obj
+/RumbleReplayMod/bin
+/RumbleReplayMod/.idea
+/RumbleReplayMod/.vs
+/RumbleReplayMod/obj
+/RumbleReplayMod/packages/*

@@ -7,8 +7,8 @@
     <ProjectGuid>{7EEBD5A9-AA24-4565-9BCA-AAD698946213}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BlenderReplayMod</RootNamespace>
-    <AssemblyName>BlenderReplayMod</AssemblyName>
+    <RootNamespace>RumbleReplay</RootNamespace>
+    <AssemblyName>RumbleReplayMod</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Il2CppBucketheadEntertainment.Plugins">
+      <HintPath>..\refs\Il2CppBucketheadEntertainment.Plugins.dll</HintPath>
+    </Reference>
     <Reference Include="Il2CppInterop.Runtime, Version=1.4.6.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BlenderReplayExporter\BlenderReplayMod\.ref\Il2CppInterop.Runtime.dll</HintPath>
@@ -39,8 +42,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BlenderReplayExporter\BlenderReplayMod\.ref\Il2Cppmscorlib.dll</HintPath>
     </Reference>
-    <Reference Include="MelonLoader">
-      <HintPath>..\refs\MelonLoader.dll</HintPath>
+    <Reference Include="MelonLoader, Version=0.7.0.0, Culture=neutral, processorArchitecture=Amd64">
+      <HintPath>packages\LavaGang.MelonLoader.0.7.0\lib\net35\MelonLoader.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RUMBLE.Runtime">
       <HintPath>..\refs\RUMBLE.Runtime.dll</HintPath>
@@ -66,16 +72,23 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\refs\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>..\refs\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlenderReplay.cs" />
+    <Compile Include="RumbleReplay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "C:\Users\blank\Projects\RumbleReplayRewrite\BlenderReplayMod\bin\Debug\BlenderReplayMod.dll" "C:\Program Files (x86)\Steam\steamapps\common\RUMBLE\Mods" /y &amp;&amp; cd "C:\Program Files (x86)\Steam\steamapps\common\RUMBLE\" &amp;&amp; start "" "steam://rungameid/890550"</PostBuildEvent>
+    <PostBuildEvent>copy "C:\Users\blank\Projects\RumbleReplayRewrite\RumbleReplayMod\bin\Debug\RumbleReplayMod.dll" "C:\Program Files (x86)\Steam\steamapps\common\RUMBLE\Mods" /y &amp;&amp; cd "C:\Program Files (x86)\Steam\steamapps\common\RUMBLE\" &amp;&amp; start "" "steam://rungameid/890550"</PostBuildEvent>
   </PropertyGroup>
 </Project>

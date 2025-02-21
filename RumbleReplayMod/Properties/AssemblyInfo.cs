@@ -1,23 +1,23 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
+using RumbleReplay;
 using MelonLoader;
-using BlenderReplayMod; // The namespace of your mod class
+
+// The namespace of your mod class
 
 // ...
-[assembly: MelonInfo(typeof(BlenderReplayModClass), "BlenderReplay", "2.0.0", "blank")]
+[assembly: MelonInfo(typeof(RumbleReplayModClass), "RumbleReplayMod", "2.0.0", "blank")]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 [assembly: MelonAdditionalDependencies("RumbleModdingAPI")]
 [assembly: MelonColor(255, 255, 170, 238)] // #FAE pink :3
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BlenderReplayMod")]
+[assembly: AssemblyTitle("RumbleReplayMod")]
 [assembly: AssemblyDescription("Generates Replay Files for use in blender or other supported programs")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("BlenderReplayMod")]
+[assembly: AssemblyProduct("RumbleReplayMod")]
 [assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
