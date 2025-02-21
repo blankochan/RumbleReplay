@@ -18,6 +18,9 @@ namespace RumbleReplay
         List<Byte> _writebuffer = new List<Byte>();
 
 
+        private MelonPreferences_Category _rumbleReplayPreferences;
+        private MelonPreferences_Entry<int> _playerUpdateInterval;
+        
         public bool Recording;
         public Int16 FrameCounter;
         internal string CurrentScene;
@@ -71,6 +74,13 @@ namespace RumbleReplay
             Calls.onMapInitialized += MapReady;
         }
 
+        public override void OnInitializeMelon()
+        {
+            _rumbleReplayPreferences = MelonPreferences.CreateCategory("OurFirstCategory");
+            
+            _playerUpdateInterval = _rumbleReplayPreferences.CreateEntry("Player_Update_Interval", 4);
+        }
+        
         public override void OnSceneWasLoaded(int _, string sceneName)
         {
             CurrentScene = sceneName;
@@ -122,7 +132,7 @@ namespace RumbleReplay
             if ( Recording )
             {
                 List<Byte> basicPlayerUpdatePartialFrame = new List<Byte>();
-                if (FrameCounter % 4 == 0) // my hack fix for every other frame
+                if (FrameCounter % _playerUpdateInterval.Value == 0) // my hack fix for every other frame
                 {
                     int index = 0;
                     foreach (Player player in Calls.Managers.GetPlayerManager().AllPlayers)
