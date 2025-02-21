@@ -83,11 +83,11 @@ namespace RumbleReplay
         
         public override void OnSceneWasLoaded(int _, string sceneName)
         {
+            Recording = false;
             CurrentScene = sceneName;
         }
         private void MapReady()
         {
-            Recording = false;
             if (CurrentScene != "Loader" && CurrentScene != "Park" && CurrentScene != "Gym")
             {
                 MelonLogger.Msg($"Loaded scene: {CurrentScene}");
