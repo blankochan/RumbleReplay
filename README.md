@@ -4,16 +4,16 @@
 Currently the only way to render replay files is Blender,
 ## Blender Setup
 
-> [!Note]
+> [!Important]
 > I do not provide any rigs or maps for you, you'll have to find/make one yourself
 
 Prerequisites
 * The [Structures](replace-with-a-working-link-when-i-have-one) Blend file (you could use your own file if its formatted right but this one has offsets and scales tuned for `RumbleReplay`)
-* A Replay 
+* A [Replay](#obtaining-a-replay) 
 * And [The Plugin](BlenderPlugin/blenderplugin.py?raw=true)
 ---
-1. Create a new Blend file
-2. In the Top Left corner<img align="right" src=https://github.com/user-attachments/assets/3080ba76-7dd9-4749-ab9a-9458fb7dd04f>
+1. Create a new Blend file<img align="right" src=https://github.com/user-attachments/assets/3080ba76-7dd9-4749-ab9a-9458fb7dd04f>
+2. In the Top Left corner
 3. Click **Link** or **Append** (either one works i recommend **link** so when you make a change to the material its reflected across all replays)
 4. Select The `Structures.blend` file i supply (or your own if you decided to make your own)
 5. Go over to Collections and select Structures
@@ -23,18 +23,20 @@ Prerequisites
 9. Open the Sidebar menu (it opens itself like 50% of the time)
 10. Move over to Misc and Press `Setup Scene` <img align="right" src="https://github.com/user-attachments/assets/ace6617d-8c1d-40ca-8d93-dafdcf6ae0b7">
 
-> [!Note]
+> [!Tip]
 >  If you want to put a camera on a players view its easier todo it now by adding a camera and parenting it to `Player.000` or `Player.001`
 
 11. Press Select File and select your replay (I recommend copying it and putting it in the same folder as your blend file)
 12. And then finally Generate Animation, blender might freeze for awhile but it should generate a animation that you're free todo what you want with
 # Obtaining a Replay
+
 After you install the mod there should be a new folder in your Melonloader UserData folder called `RumbleReplay`
 
 Whenever you start a match it'll automatically create a new `.RR` file
 With the filename structure `{localPlayerName}-Vs-{remotePlayerName} On {map}-{RandomizedName}.rr`
 
-If you want to find the newest file you can right click in explorer and click `Sort By` and then `Date modified`
+> [!Tip]
+> If you want to find the newest file you can right click in explorer and click `Sort By` and then `Date modified`
 
 # Building
 ## Project Setup
@@ -50,7 +52,6 @@ If you want to find the newest file you can right click in explorer and click `S
 - `UnityEngine.CoreModule.dll` 
 - `UnityEngine.PhysicsModule.dll`
 - `UnityEngine.InputLegacyModule.dll` 
-
 ### From `RUMBLE/MelonLoader/net6` 
 
 * `Il2CppInterop.Common.dll`
@@ -62,5 +63,5 @@ If you want to find the newest file you can right click in explorer and click `S
 ### Add That `References` folder as a References Folder in your editor (or just select all of them and reference them)
 
 > [!NOTE]
-> For those who wanna make their own recorders/parsers
-> I have included an ImHex Pattern that defines the structure of `.rr` files 
+> For those who wanna make their own recorders/parsers, or prepose changes or otherwise just understand the format
+> I have included an [ImHex Pattern](https://raw.githubusercontent.com/blankochan/RumbleReplayRecorder/refs/heads/master/v2RRparser.hexpat) that defines the structure of `.rr` files 
