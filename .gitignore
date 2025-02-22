@@ -1,4 +1,6 @@
 /References
+*/*.blend
+*/*.blend1
 /RumbleReplayMod/bin
 /RumbleReplayMod/.idea
 /RumbleReplayMod/.vs
