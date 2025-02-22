@@ -51,7 +51,7 @@ namespace RumbleReplay
             string header = JsonConvert.SerializeObject(replayHeader);
             if (_replayFile != null) { StopReplay(); }
             LoggerInstance.Msg("Recording Started");
-            _replayFile = File.Create($"replays/{localPlayerName}-Vs-{remotePlayerName} On {scene}-{Path.GetRandomFileName()}.rr"); 
+            _replayFile = File.Create($"UserData/RumbleReplay/{localPlayerName}-Vs-{remotePlayerName} On {scene}-{Path.GetRandomFileName()}.rr"); 
 
             _replayWriter = new BinaryWriter(_replayFile);
             byte[] magicBytes = { 0x52, 0x52 }; // 'RR'
