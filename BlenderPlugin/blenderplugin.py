@@ -224,12 +224,12 @@ def ParseBasicPlayerUpdate(f:BufferedReader,FrameLength:int, FrameCounter:int,Fr
 
         
 
-        OBJECT_NAME:str = f"Player.{str(PLAYER_INDEX+1).zfill(3)}" #should output something like Player.001
+        OBJECT_NAME:str = f"Player.{str(PLAYER_INDEX).zfill(3)}" #should output something like Player.001
 
         try:
             obj:bpy.types.Object = bpy.data.objects[OBJECT_NAME]
-            leftHand:bpy.types.Object = bpy.data.objects[f"Hand.{str(PLAYER_INDEX+1).zfill(3)}.L"]
-            rightHand:bpy.types.Object = bpy.data.objects[f"Hand.{str(PLAYER_INDEX+1).zfill(3)}.R"]
+            leftHand:bpy.types.Object = bpy.data.objects[f"Hand.{str(PLAYER_INDEX).zfill(3)}.L"]
+            rightHand:bpy.types.Object = bpy.data.objects[f"Hand.{str(PLAYER_INDEX).zfill(3)}.R"]
         except:
             print(OBJECT_NAME,":PlayerNotFound@",f.tell())
             continue # should call if its an object we dont have an object for, isnt a big deal like 99% of time 
