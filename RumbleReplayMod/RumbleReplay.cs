@@ -78,7 +78,8 @@ namespace RumbleReplay
         {
             _rumbleReplayPreferences = MelonPreferences.CreateCategory("OurFirstCategory");
             _rumbleReplayPreferences.SetFilePath(@"UserData/RumbleReplay/RumbleReplay.cfg");
-            _basicPlayerUpdateInterval = _rumbleReplayPreferences.CreateEntry("BasicPlayerUpdate_Interval", 4);
+            _basicPlayerUpdateInterval = _rumbleReplayPreferences.CreateEntry("BasicPlayerUpdate_Interval", 4,description:"The Rate we Update The Players Hands and head (will deprecate when better solution arises)");
+            _basicStructureUpdateInterval = _rumbleReplayPreferences.CreateEntry("BasicStructureUpdate_Interval", 1,description:"The Rate Structure Positions and Rotations are updated");
             _enabled = _rumbleReplayPreferences.CreateEntry("RecordingEnabled", true);
             _rumbleReplayPreferences.SaveToFile();
             
@@ -182,12 +183,13 @@ namespace RumbleReplay
                     }
                 }
                 List<Byte> objectUpdatePartialFrame = new List<Byte>();
-                for (UInt16 poolIndex = 0; poolIndex < _poolObjects.Length; poolIndex++)
-                {
-                    var pool = _poolObjects[poolIndex];
-                    for (UInt16 i = 0; i < _cullers[poolIndex].Length; i++)
+                if (FrameCounter % _basicStructureUpdateInterval.Value == 0){ 
+                    for (UInt16 poolIndex = 0; poolIndex < _poolObjects.Length; poolIndex++)
                     {
-                        GameObject structure = pool.transform.GetChild(i).gameObject;
+                        var pool = _poolObjects[poolIndex];
+                        for (UInt16 i = 0; i < _cullers[poolIndex].Length; i++)
+                        {
+                            GameObject structure = pool.transform.GetChild(i).gameObject;
                         if (_cullers[poolIndex][i] == structure.transform.position.GetHashCode()) 
                         {
                             continue;
@@ -212,7 +214,8 @@ namespace RumbleReplay
                         objectUpdatePartialFrame.AddRange(BitConverter.GetBytes(transform.rotation.y)); // Position Y
                         objectUpdatePartialFrame.AddRange(BitConverter.GetBytes(transform.rotation.x)); // Position X
                         objectUpdatePartialFrame.AddRange(BitConverter.GetBytes(transform.rotation.z)); // Position Z
-                    }
+                        }
+                    } 
                 }
                 //Frame Header
                 if (objectUpdatePartialFrame.Count != 0)
