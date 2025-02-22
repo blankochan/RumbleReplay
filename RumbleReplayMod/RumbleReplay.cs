@@ -51,7 +51,8 @@ namespace RumbleReplay
             string header = JsonConvert.SerializeObject(replayHeader);
             if (_replayFile != null) { StopReplay(); }
             LoggerInstance.Msg("Recording Started");
-            _replayFile = File.Create($"UserData/RumbleReplay/{localPlayerName}-Vs-{remotePlayerName} On {scene}-{Path.GetRandomFileName()}.rr"); 
+            if (!Directory.Exists("UserData/Replays")){ Directory.CreateDirectory("UserData/Replays"); }
+            _replayFile = File.Create($"UserData/Replays/{localPlayerName}-Vs-{remotePlayerName} On {scene}-{Path.GetRandomFileName()}.rr"); 
 
             _replayWriter = new BinaryWriter(_replayFile);
             byte[] magicBytes = { 0x52, 0x52 }; // 'RR'
@@ -82,8 +83,8 @@ namespace RumbleReplay
 
         public override void OnInitializeMelon()
         {
-            _rumbleReplayPreferences = MelonPreferences.CreateCategory("OurFirstCategory");
-            _rumbleReplayPreferences.SetFilePath(@"UserData/RumbleReplay/RumbleReplay.cfg");
+            _rumbleReplayPreferences = MelonPreferences.CreateCategory("RumbleReplaySettings");
+            _rumbleReplayPreferences.SetFilePath(@"UserData/RumbleReplay.cfg");
             _basicPlayerUpdateInterval = _rumbleReplayPreferences.CreateEntry("BasicPlayerUpdate_Interval", 4,description:"The Rate we Update The Players Hands and head (will deprecate when better solution arises)");
             _basicStructureUpdateInterval = _rumbleReplayPreferences.CreateEntry("BasicStructureUpdate_Interval", 1,description:"The Rate Structure Positions and Rotations are updated");
             _enabled = _rumbleReplayPreferences.CreateEntry("RecordingEnabled", true);
