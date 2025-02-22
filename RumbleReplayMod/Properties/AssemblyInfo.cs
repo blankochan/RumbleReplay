@@ -6,7 +6,7 @@ using MelonLoader;
 // The namespace of your mod class
 
 // ...
-[assembly: MelonInfo(typeof(RumbleReplayModClass), "RumbleReplayMod", "2.0.0", "blank")]
+[assembly: MelonInfo(typeof(RumbleReplayModClass), "RumbleReplayMod", "1.0.0", "blank")]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 [assembly: MelonAdditionalDependencies("RumbleModdingAPI")]
 [assembly: MelonColor(255, 255, 170, 238)] // #FAE pink :3

@@ -31,7 +31,7 @@ namespace RumbleReplay
         BinaryWriter _replayWriter;
         public sealed class ReplayHeader //ignore the warnings about unused variables it gets serialized by JsonConvert.SerializeObject
         {
-            public readonly string Version = "2.0.0";
+            public readonly string Version = "1.0.0";
             public string EnemyName;
             public string LocalName;
             public string MapName;
