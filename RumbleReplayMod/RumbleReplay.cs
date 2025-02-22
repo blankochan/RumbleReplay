@@ -20,7 +20,10 @@ namespace RumbleReplay
 
         private MelonPreferences_Category _rumbleReplayPreferences;
         private MelonPreferences_Entry<int> _basicPlayerUpdateInterval;
+        private MelonPreferences_Entry<int> _basicStructureUpdateInterval;
         private MelonPreferences_Entry<bool> _enabled;
+        
+        
         public bool Recording;
         public Int16 FrameCounter;
         internal string CurrentScene;
