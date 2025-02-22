@@ -77,7 +77,7 @@ namespace RumbleReplay
         public override void OnInitializeMelon()
         {
             _rumbleReplayPreferences = MelonPreferences.CreateCategory("OurFirstCategory");
-            
+            _rumbleReplayPreferences.SetFilePath(@"UserData/RumbleReplay/RumbleReplay.cfg");
             _playerUpdateInterval = _rumbleReplayPreferences.CreateEntry("Player_Update_Interval", 4);
             _enabled = _rumbleReplayPreferences.CreateEntry("RecordingEnabled", true);
             _rumbleReplayPreferences.SaveToFile();
