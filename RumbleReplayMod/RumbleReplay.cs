@@ -128,9 +128,7 @@ namespace RumbleReplay
                 NewReplay(CurrentScene,Regex.Replace(localPlayer, "[^a-zA-Z0-9_ ]", ""),Regex.Replace(remotePlayer, "[^a-zA-Z0-9_ ]", ""));  
             }
             else // put our stop logic here
-            {
                 StopReplay();
-            }
         }
         public override void OnFixedUpdate()
         {
