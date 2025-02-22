@@ -8,7 +8,7 @@ Currently the only way to render replay files is Blender,
 > I do not provide any rigs or maps for you, you'll have to find/make one yourself
 
 Prerequisites
-* The [Structures](replace-with-a-working-link-when-i-have-one) Blend file (you could use your own file if its formatted right but this one has offsets and scales tuned for `RumbleReplay`)
+* The [Structures](https://github.com/blankochan/RumbleReplay/blob/master/BlenderPlugin/Structures.blend?raw=true) Blend file (you could use your own file if its formatted right but this one has offsets and scales tuned for `RumbleReplay`)
 * A [Replay](#obtaining-a-replay) 
 * And [The Plugin](BlenderPlugin/blenderplugin.py?raw=true)
 ---
@@ -64,4 +64,4 @@ With the filename structure `{localPlayerName}-Vs-{remotePlayerName} On {map}-{R
 
 > [!NOTE]
 > For those who wanna make their own recorders/parsers, or prepose changes or otherwise just understand the format
-> I have included an [ImHex Pattern](https://raw.githubusercontent.com/blankochan/RumbleReplayRecorder/refs/heads/master/v2RRparser.hexpat) that defines the structure of `.rr` files 
+> I have included an [ImHex Pattern](https://raw.githubusercontent.com/blankochan/RumbleReplay/refs/heads/master/v2RRparser.hexpat) that defines the structure of `.rr` files 
