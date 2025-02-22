@@ -1,9 +1,7 @@
 
 # Playing a Replay
 
-Currently the only way to render replay files is Blender, i intend to make a Godot version with support for Realtime tournament play
-
-
+Currently the only way to render replay files is Blender,
 ## Blender Setup
 
 > [!Note]
@@ -15,28 +13,22 @@ Prerequisites
 * And [The Plugin](BlenderPlugin/blenderplugin.py?raw=true)
 ---
 1. Create a new Blend file
-2. In the Top Left corner
-
-![Step 2](https://github.com/user-attachments/assets/110a556e-5e66-4261-9ec6-317d9b3c1414)
-
-4.  Click **Link** or **Append** (either one works i recommend **link** so when you make a change to the material its reflected across all replays)
-5. Select The `Structures.blend` file i supply (or your own if you decided to make your own)
-If you have a map this is when I suggest you link it in
-1. Go over to Collections and select Structures
-	Now we have to add the plugin, my plugin is added on a per blend file basis
-6. Move over to the scripting tab
-
-![Step 6](https://github.com/user-attachments/assets/7ecca53a-6ac6-4f85-9336-5d09f2c7a941)
-
-7. Click open and select the `blenderplugin.py` file I give you
-8. Press the little play button
+2. In the Top Left corner<img align="right" src=https://github.com/user-attachments/assets/3080ba76-7dd9-4749-ab9a-9458fb7dd04f>
+3. Click **Link** or **Append** (either one works i recommend **link** so when you make a change to the material its reflected across all replays)
+4. Select The `Structures.blend` file i supply (or your own if you decided to make your own)
+5. Go over to Collections and select Structures
+6. Move over to the scripting tab 
+7. Click open and select the `blenderplugin.py` file I give you<img align="right" src=https://github.com/user-attachments/assets/e6f09c80-d301-4672-b7bf-40d47890c650>
+8. Press the little play button ![playbutton](https://github.com/user-attachments/assets/920b4c27-2d56-461a-bbd6-d8e1403d8cf6)
 9. Open the Sidebar menu (it opens itself like 50% of the time)
-10. Move over to Misc and Press `Setup Scene`
-11. If you want to put a camera on a players view its easier todo it now by adding a camera and parenting it to Player.001 or Player.002 (yes i know it starts at 000, but its inconsistently on my system so the code starts animating with 001 through however many players are in the file)
-12. Press Select File and select your replay (I recommend copying it and putting it in the same folder as your blend file)
-13. And then finally Generate Animation, blender might freeze for awhile but it should generate a animation that you're free todo what you want with
-# Obtaining a Replay
+10. Move over to Misc and Press `Setup Scene` <img align="right" src="https://github.com/user-attachments/assets/ace6617d-8c1d-40ca-8d93-dafdcf6ae0b7">
 
+> [!Note]
+>  If you want to put a camera on a players view its easier todo it now by adding a camera and parenting it to `Player.000` or `Player.001`
+
+11. Press Select File and select your replay (I recommend copying it and putting it in the same folder as your blend file)
+12. And then finally Generate Animation, blender might freeze for awhile but it should generate a animation that you're free todo what you want with
+# Obtaining a Replay
 After you install the mod there should be a new folder in your Melonloader UserData folder called `RumbleReplay`
 
 Whenever you start a match it'll automatically create a new `.RR` file
@@ -48,28 +40,27 @@ If you want to find the newest file you can right click in explorer and click `S
 ## Project Setup
 
 ### Create a `References` folder in your project directory
+### From `RUMBLE/MelonLoader/Il2CppAssemblies` copy to `References`:
 
-- Copy `RumbleModdingAPI.dll` ( you can get it from its Thunderstore page) to `References`
+- `Il2Cppmscorlib.dll`
+- `Il2CppInterop.Runtime.dll`
+- `Il2CppRUMBLE.Runtime.dll`
+- `Il2CppBucketheadEntertainment.Plugins.dll` 
+- `UnityEngine.dll` 
+- `UnityEngine.CoreModule.dll` 
+- `UnityEngine.PhysicsModule.dll`
+- `UnityEngine.InputLegacyModule.dll` 
 
-- Copy `Il2Cppmscorlib.dll` from `RUMBLE/MelonLoader/Il2CppAssemblies` to `References`
+### From `RUMBLE/MelonLoader/net6` 
 
-- Copy `Il2CppInterop.Runtime.dll` from `RUMBLE/MelonLoader/Il2CppAssemblies` to `References`
+* `Il2CppInterop.Common.dll`
+* `Il2CppInterop.Generator.dll`
+* `Il2CppInterop.Runtime.dll`
 
-- Copy `Il2CppRUMBLE.Runtime.dll` from `RUMBLE/MelonLoader/Il2CppAssemblies` to `References`
+### Add `RumbleModdingAPI.dll` (obtainable via [thunderstore](https://thunderstore.io/c/rumble/p/UlvakSkillz/RumbleModdingAPI/) if you dont have it) to references
+### Restore NuGet packages if needed
+### Add That `References` folder as a References Folder in your editor (or just select all of them and reference them)
 
-- Copy `Il2CppBucketheadEntertainment.Plugins.dll` from `RUMBLE/MelonLoader/Il2CppAssemblies` to `References`
-
-- Copy `UnityEngine.dll` from `RUMBLE/MelonLoader/Il2CppAssemblies` to `References`
-
-- Copy `UnityEngine.CoreModule.dll` from `RUMBLE/MelonLoader/Il2CppAssemblies` to `References`
-
-- Copy `UnityEngine.PhysicsModule.dll` from `RUMBLE/MelonLoader/Il2CppAssemblies` to `References`
-
-- Copy `UnityEngine.InputLegacyModule.dll` from `RUMBLE/MelonLoader/Il2CppAssemblies` to `References`
-
-- Restore NuGet packages if needed
-### Add That folder as a reference in your editor (or just select all of them and reference them)
-
-
-### For those who wanna make their own recorders/parsers
-I have included an ImHex pattern that defines the structure of `.rr` files 
+> [!NOTE]
+> For those who wanna make their own recorders/parsers
+> I have included an ImHex Pattern that defines the structure of `.rr` files 
