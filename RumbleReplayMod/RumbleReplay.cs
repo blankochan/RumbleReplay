@@ -97,7 +97,7 @@ namespace RumbleReplay
         
         public override void OnSceneWasLoaded(int _, string sceneName)
         {
-            Recording = false;
+            if (Recording) StopReplay();    
             CurrentScene = sceneName;
         }
         private void MapReady()
@@ -136,8 +136,6 @@ namespace RumbleReplay
                 LoggerInstance.Msg(remotePlayer);
                 NewReplay(CurrentScene,Regex.Replace(localPlayer, "[^a-zA-Z0-9_ ]", ""),Regex.Replace(remotePlayer, "[^a-zA-Z0-9_ ]", ""));  
             }
-            else // put our stop logic here
-                StopReplay();
         }
 
         public override void OnApplicationQuit()
@@ -148,6 +146,8 @@ namespace RumbleReplay
             }
         }
 
+        
+        
         public override void OnFixedUpdate()
         {
             if ( Recording )
