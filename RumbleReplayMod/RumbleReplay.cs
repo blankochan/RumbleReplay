@@ -85,8 +85,8 @@ namespace RumbleReplay
         {
             _rumbleReplayPreferences = MelonPreferences.CreateCategory("RumbleReplaySettings");
             _rumbleReplayPreferences.SetFilePath(@"UserData/RumbleReplay.cfg");
-            _basicPlayerUpdateInterval = _rumbleReplayPreferences.CreateEntry("BasicPlayerUpdate_Interval", 4,description:"The Rate we Update The Players Hands and head (will deprecate when better solution arises)");
-            _basicStructureUpdateInterval = _rumbleReplayPreferences.CreateEntry("BasicStructureUpdate_Interval", 1,description:"The Rate Structure Positions and Rotations are updated");
+            _basicPlayerUpdateInterval = _rumbleReplayPreferences.CreateEntry("BasicPlayerUpdate_Interval", 4,description:"The interval we create updates for the players Hands and Head (will deprecate when better solution arises)");
+            _basicStructureUpdateInterval = _rumbleReplayPreferences.CreateEntry("BasicStructureUpdate_Interval", 1,description:"the interval structure positions and rotations are updated (Leave at 1 for 1 update every physics frame, 2 for one update every 2 and so on)");
             _enabled = _rumbleReplayPreferences.CreateEntry("RecordingEnabled", true);
             _rumbleReplayPreferences.SaveToFile();
             
