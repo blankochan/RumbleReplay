@@ -36,6 +36,9 @@ namespace RumbleReplay
         }
         public void NewReplay(string scene,string localPlayerName = "", string remotePlayerName = "")
         {
+            if (!_enabled.Value){return;}
+            
+            
             ReplayHeader replayHeader = new ReplayHeader
             {
                 EnemyName = remotePlayerName,
