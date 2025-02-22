@@ -131,6 +131,15 @@ namespace RumbleReplay
             else // put our stop logic here
                 StopReplay();
         }
+
+        public override void OnApplicationQuit()
+        {
+            if (Recording)
+            {
+                StopReplay();
+            }
+        }
+
         public override void OnFixedUpdate()
         {
             if ( Recording )
