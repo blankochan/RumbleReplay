@@ -90,6 +90,7 @@ namespace RumbleReplay
             _rumbleReplayPreferences.SaveToFile();
             
             LoggerInstance.Msg($"BasicPlayerUpdate_Interval={_basicPlayerUpdateInterval.Value}");
+            LoggerInstance.Msg($"BasicStructureUpdate_Interval={_basicStructureUpdateInterval.Value}");
             LoggerInstance.Msg($"Enabled {_enabled.Value}");
         }
         
