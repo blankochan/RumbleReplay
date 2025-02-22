@@ -19,8 +19,8 @@ namespace RumbleReplay
 
 
         private MelonPreferences_Category _rumbleReplayPreferences;
-        private MelonPreferences_Entry<int> _playerUpdateInterval;
-        
+        private MelonPreferences_Entry<int> _basicPlayerUpdateInterval;
+        private MelonPreferences_Entry<bool> _enabled;
         public bool Recording;
         public Int16 FrameCounter;
         internal string CurrentScene;
@@ -78,7 +78,7 @@ namespace RumbleReplay
         {
             _rumbleReplayPreferences = MelonPreferences.CreateCategory("OurFirstCategory");
             _rumbleReplayPreferences.SetFilePath(@"UserData/RumbleReplay/RumbleReplay.cfg");
-            _playerUpdateInterval = _rumbleReplayPreferences.CreateEntry("Player_Update_Interval", 4);
+            _basicPlayerUpdateInterval = _rumbleReplayPreferences.CreateEntry("BasicPlayerUpdate_Interval", 4);
             _enabled = _rumbleReplayPreferences.CreateEntry("RecordingEnabled", true);
             _rumbleReplayPreferences.SaveToFile();
             
