@@ -62,7 +62,7 @@ namespace RumbleReplay
             
             Recording = false; //should get ModUI support for starting/stopping at some point
             FrameCounter = 0;
-            MelonLogger.Msg("Recording Stopped");
+            LoggerInstance.Msg("Recording Stopped");
             _replayFile.Close();
             _replayFile = null;
             _replayWriter = null;
@@ -82,8 +82,8 @@ namespace RumbleReplay
             _enabled = _rumbleReplayPreferences.CreateEntry("RecordingEnabled", true);
             _rumbleReplayPreferences.SaveToFile();
             
-            LoggerInstance.Msg($"Player_Update_Interval={_playerUpdateInterval.Value}");
-            LoggerInstance.Msg($"Enabled={_enabled.Value}");
+            LoggerInstance.Msg($"BasicPlayerUpdate_Interval={_basicPlayerUpdateInterval.Value}");
+            LoggerInstance.Msg($"Enabled {_enabled.Value}");
         }
         
         public override void OnSceneWasLoaded(int _, string sceneName)
@@ -121,7 +121,7 @@ namespace RumbleReplay
 
                     }
                 }
-                string localPlayer = Calls.Managers.GetPlayerManager().LocalPlayer.Data.GeneralData.PublicUsername;
+                string localPlayer = Calls.Managers.GetPlayerManager().LocalPlayer?.Data.GeneralData.PublicUsername ?? "Unknown"; // should never happen but it might?
                 string remotePlayer = Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.GeneralData.PublicUsername ?? "Unknown";
                 LoggerInstance.Msg(localPlayer);
                 LoggerInstance.Msg(remotePlayer);
@@ -137,7 +137,7 @@ namespace RumbleReplay
             if ( Recording )
             {
                 List<Byte> basicPlayerUpdatePartialFrame = new List<Byte>();
-                if (FrameCounter % _playerUpdateInterval.Value == 0) // my hack fix for every other frame
+                if (FrameCounter % _basicPlayerUpdateInterval.Value == 0) // my hack fix for every other frame
                 {
                     int index = 0;
                     foreach (Player player in Calls.Managers.GetPlayerManager().AllPlayers)
