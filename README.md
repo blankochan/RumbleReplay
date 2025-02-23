@@ -47,7 +47,7 @@ Prerequisites
 
 # Obtaining a Replay
 
-After you install the mod, there should be a new folder in your `Melonloader\UserData` folder called RumbleReplay
+After you install the mod, there should be a new folder in your `Melonloader\UserData` folder called `Replays`
 
 Whenever you start a match, it'll automatically create a new .RR file.
 
