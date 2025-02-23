@@ -39,7 +39,7 @@ Prerequisites
 10. Move over to Misc; and Press `Setup Scene` <img align="right" src="https://github.com/user-attachments/assets/ace6617d-8c1d-40ca-8d93-dafdcf6ae0b7">
 
 > [!Tip]
->  If you want to put a camera on a players view its easier todo it now by adding a camera and parenting it to Player.000 or Player.001
+>  If you want to put a camera on a players view its easier to do it now, by adding a camera and parenting it to Player.000 or Player.001 
 
 11. Press `Select File` and select your replay (I recommend copying it and putting it in the same folder as your blend file).
 
