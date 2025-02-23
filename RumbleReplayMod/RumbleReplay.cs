@@ -158,8 +158,10 @@ namespace RumbleReplay
                     int index = 0;
                     foreach (Player player in Calls.Managers.GetPlayerManager().AllPlayers)
                     {
-                         
-                         Transform headTransform = player.Controller.transform.GetChild(5).GetChild(4).transform; // head position
+                        
+                        int hitboxOffset = 5;
+                        if (index != 0) hitboxOffset = 6; // remote player hitboxes start at 6 instead of 5 and according to ulvak ALlPlayers always starts at 0 for the local
+                         Transform headTransform = player.Controller.transform.GetChild(hitboxOffset).GetChild(4).transform; // head position
                          Transform leftHandTransform = player.Controller.transform.GetChild(1).GetChild(1).transform; // Left Hand Transform
                          Transform rightHandTransform = player.Controller.transform.GetChild(1).GetChild(2).transform; // Right Hand Transform
                          
