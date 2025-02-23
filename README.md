@@ -98,3 +98,4 @@ With the filename structure `{localPlayerName}-Vs-{remotePlayerName} On {map}-{R
 > For those who wanna make their own recorders/parsers, or prepose changes or otherwise just understand the format
 > I have included an [ImHex Pattern](https://raw.githubusercontent.com/blankochan/RumbleReplay/refs/heads/master/v2RRparser.hexpat) that defines the structure of .rr files 
 
+###### Special thanks to SDRAWKCABMIAY for making the CRUMBLE font used in the logo
