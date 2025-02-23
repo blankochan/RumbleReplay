@@ -266,12 +266,5 @@ namespace RumbleReplay
 
             }
         }
-        public override void OnUpdate()
-        {
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                // fill with debugging info or smth
-            }
-        }
     }
 }
