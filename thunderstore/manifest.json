@@ -1,0 +1,9 @@
+{
+    "name": "RumbleReplay",
+    "version_number": "1.0.1",
+    "website_url": "https://thunderstore.io/c/rumble/p/blanko/RumbleReplay",
+    "description": "Records rumble matches into a basic Replay format, see github for useage instructions",
+    "dependencies": [
+        "UlvakSkillz-RumbleModdingAPI-3.3.1"
+    ]
+}
