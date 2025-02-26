@@ -14,7 +14,7 @@ Prerequisites
 
 * A [Replay](#obtaining-a-replay) 
 
-* And [the Plugin](BlenderPlugin/blenderplugin.py?raw=true)
+* And [The Plugin](BlenderPlugin/blenderplugin.py?raw=true) (right click save as file if you dont want to clone the repo) 
 
 ---
 
