@@ -37,6 +37,33 @@ namespace RumbleReplay
             public string MapName;
             public readonly string Date = DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss");
         }
+
+        private static List<Byte> SerializeTransform(Transform transform,bool includeRotation=true,bool includePosition=true ,bool includeScale=false)
+        {
+            List<Byte> buffer = new List<Byte>();
+            if (includePosition){
+                buffer.AddRange(BitConverter.GetBytes(transform.position.x)); // Position X
+                buffer.AddRange(BitConverter.GetBytes(transform.position.y)); // Position Y
+                buffer.AddRange(BitConverter.GetBytes(transform.position.z)); // Position Z
+            }
+
+            if (includeRotation)
+            {
+                buffer.AddRange(BitConverter.GetBytes(transform.rotation.w)); // Rotation W
+                buffer.AddRange(BitConverter.GetBytes(transform.rotation.y)); // Rotation Y
+                buffer.AddRange(BitConverter.GetBytes(transform.rotation.x)); // Rotation X
+                buffer.AddRange(BitConverter.GetBytes(transform.rotation.z)); // Rotation Z
+            }
+
+            if (includeScale)
+            {
+                buffer.AddRange(BitConverter.GetBytes(transform.localScale.x)); // Scale X
+                buffer.AddRange(BitConverter.GetBytes(transform.localScale.y)); // Scale Y
+                buffer.AddRange(BitConverter.GetBytes(transform.localScale.z)); // Scale Z
+            }
+
+            return buffer;
+        }
         public void NewReplay(string scene,string localPlayerName = "", string remotePlayerName = "")
         {
             if (!_enabled.Value){return;}
