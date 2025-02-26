@@ -169,7 +169,7 @@ namespace RumbleReplay
                 string remotePlayer = Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.GeneralData.PublicUsername ?? "Unknown";
                 LoggerInstance.Msg(localPlayer);
                 LoggerInstance.Msg(remotePlayer);
-                NewReplay(_currentScene,Regex.Replace(localPlayer, "[^a-zA-Z0-9_ ]", ""),Regex.Replace(remotePlayer, "[^a-zA-Z0-9_ ]", ""));  
+                NewReplay(_currentScene,Regex.Replace(localPlayer, "<.*?>|[^a-zA-Z0-9_ ]", ""),Regex.Replace(remotePlayer, "<.*?>|[^a-zA-Z0-9_ ]", ""));  
             }
         }
 
