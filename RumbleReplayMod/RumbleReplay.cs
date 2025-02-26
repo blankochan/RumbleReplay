@@ -85,7 +85,9 @@ namespace RumbleReplay
             byte[] magicBytes = { 0x52, 0x52 }; // 'RR'
 
             _replayWriter.Write(magicBytes);
-            _replayWriter.Write(header); // json header, first byte is str length
+            _replayWriter.Write((byte)header.Length);
+            _replayWriter.Write(Encoding.UTF8.GetBytes(header)); // json header
+            
             Recording = true; //should get ModUI support for starting/stopping at some point 
         }
         public void StopReplay()
