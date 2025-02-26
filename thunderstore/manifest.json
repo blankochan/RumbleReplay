@@ -4,6 +4,7 @@
     "website_url": "https://thunderstore.io/c/rumble/p/blanko/RumbleReplay",
     "description": "Records rumble matches into a basic Replay format, see github for useage instructions",
     "dependencies": [
+        "LavaGang-MelonLoader-0.7.0",
         "UlvakSkillz-RumbleModdingAPI-3.3.1"
     ]
 }
