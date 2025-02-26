@@ -31,12 +31,6 @@ jobs:
     - name: Change Working Directory to RumbleReplayMod
       run: cd RumbleReplayMod
 
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.5
-
-    - name: Restore Packages
-      run: nuget restore RumbleReplayMod.sln
-
     - name: Restore dependencies
       run: dotnet restore
       
