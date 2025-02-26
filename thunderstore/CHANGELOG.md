@@ -4,6 +4,7 @@
 - Also added a more up to date Structures.blend because ive accidently been using an older verison
 - Decided to just mirror the README from the github 
 - Updated description to be more informative
+- Started Tracking Cosmetics
 
 # 1.0.2
 - Fixed an issue where if the header was above 128 bytes it'd add a empty pad byte
