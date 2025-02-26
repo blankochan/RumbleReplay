@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Il2CppRUMBLE.Players;
+using Il2CppSystem.Text;
 using MelonLoader;
 using Newtonsoft.Json;
 using RumbleModdingAPI;
@@ -13,9 +14,9 @@ namespace RumbleReplay
 {
     public sealed class RumbleReplayModClass : MelonMod
     {
-        GameObject[] _poolObjects = new GameObject[8]; // Global to the class, easier to keep track of 
-        readonly int[][] _cullers = new int[8][];
-        List<Byte> _writebuffer = new List<Byte>();
+        readonly GameObject[] _poolObjects = new GameObject[8]; // Global to the class, easier to keep track of 
+        private readonly int[][] _cullers = new int[8][];
+        private readonly List<Byte> _writebuffer = new List<Byte>();
 
 
         private MelonPreferences_Category _rumbleReplayPreferences;
@@ -26,7 +27,7 @@ namespace RumbleReplay
         
         public bool Recording;
         public Int16 FrameCounter;
-        internal string CurrentScene;
+        private string _currentScene;
         FileStream _replayFile;
         BinaryWriter _replayWriter;
         public sealed class ReplayHeader //ignore the warnings about unused variables it gets serialized by JsonConvert.SerializeObject
