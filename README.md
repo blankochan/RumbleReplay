@@ -66,8 +66,6 @@ With the filename structure `{localPlayerName}-Vs-{remotePlayerName} On {map}-{R
 
 - `Il2Cppmscorlib.dll`
 
-- `Il2CppInterop.Runtime.dll`
-
 - `Il2CppRUMBLE.Runtime.dll`
 
 - `Il2CppBucketheadEntertainment.Plugins.dll` 
