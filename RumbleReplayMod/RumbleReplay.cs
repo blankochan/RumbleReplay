@@ -190,48 +190,21 @@ namespace RumbleReplay
                 if (FrameCounter % _basicPlayerUpdateInterval.Value == 0) // my hack fix for every other frame
                 {
                     int index = 0;
-                    foreach (Player player in Calls.Managers.GetPlayerManager().AllPlayers)
-                    {
-                        
-                        int hitboxOffset = 5;
-                        if (index != 0) hitboxOffset = 6; // remote player hitboxes start at 6 instead of 5 and according to ulvak ALlPlayers always starts at 0 for the local
-                         Transform headTransform = player.Controller.transform.GetChild(hitboxOffset).GetChild(4).transform; // head position
-                         Transform leftHandTransform = player.Controller.transform.GetChild(1).GetChild(1).transform; // Left Hand Transform
-                         Transform rightHandTransform = player.Controller.transform.GetChild(1).GetChild(2).transform; // Right Hand Transform
-                         
+                    foreach (Player player in Calls.Managers.GetPlayerManager().AllPlayers) // worth noting this doesn't instantly update so you can Null Reference 
+                    { 
+                         // remote player hitboxes start at 6 instead of 5 and ALlPlayers always starts at 0 for the local
+                         Transform headTransform = player?.Controller.transform.GetChild(index > 0 ? 6 : 5).GetChild(4).transform ?? new Transform(); // head hitbox,
+                         // I don't fully remember why im using the hitbox, I think it was something along the lines of the quaternion rotation being broken with headset offset
+                         Transform leftHandTransform = player?.Controller.transform.GetChild(1).GetChild(1).transform ?? new Transform(); // Left Controller
+                         Transform rightHandTransform = player?.Controller.transform.GetChild(1).GetChild(2).transform ?? new Transform(); // Right Controller   
+                            
                          basicPlayerUpdatePartialFrame.Add(((byte)index)); // PlayerId
                          
-                         // Head
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(headTransform.position.x)); // Position X
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(headTransform.position.y)); // Position Y
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(headTransform.position.z)); // Position Z
-                         
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(headTransform.rotation.w)); // Rotation W
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(headTransform.rotation.y)); // Position Y
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(headTransform.rotation.x)); // Position X
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(headTransform.rotation.z)); // Position Z
+                         basicPlayerUpdatePartialFrame.AddRange(SerializeTransform(headTransform));
                          
                          // Hands
-                         // Left Hand
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(leftHandTransform.position.x)); // Position X
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(leftHandTransform.position.y)); // Position Y
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(leftHandTransform.position.z)); // Position Z
-                         
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(leftHandTransform.rotation.w)); // Rotation W
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(leftHandTransform.rotation.y)); // Position Y
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(leftHandTransform.rotation.x)); // Position X
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(leftHandTransform.rotation.z)); // Position Z
-                         
-                         // Right Hand
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(rightHandTransform.position.x)); // Position X
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(rightHandTransform.position.y)); // Position Y
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(rightHandTransform.position.z)); // Position Z
-                         
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(rightHandTransform.rotation.w)); // Rotation W
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(rightHandTransform.rotation.y)); // Position Y
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(rightHandTransform.rotation.x)); // Position X
-                         basicPlayerUpdatePartialFrame.AddRange(BitConverter.GetBytes(rightHandTransform.rotation.z)); // Position Z
-                         
+                         basicPlayerUpdatePartialFrame.AddRange(SerializeTransform(leftHandTransform));
+                         basicPlayerUpdatePartialFrame.AddRange(SerializeTransform(rightHandTransform));
                          index++;
                     }
                 }
@@ -252,21 +225,14 @@ namespace RumbleReplay
 
                         objectUpdatePartialFrame.Add(((byte)poolIndex)); // Structure Type
                         objectUpdatePartialFrame.Add(((byte)i)); // Object Index, there might be space savings here, but I don't know how to do that and its nicer looking this way.
-                        Transform transform = structure.transform;
-                        var transformPosition = structure.transform.position; // for some reason rider throws an error, if I don't separate it out, visual studio 2022 doesn't, but I use rider so stuck with this
-                        if (structure.GetComponent<Rigidbody>().IsSleeping() && structure.transform.position.y <= 0) // rumble when it breaks something sets the Y to a number below 0 (the exact number changes on my system sometimes, but It's always below 0)
+                        Transform transform = structure.transform; 
+                        if (!structure.active) // rumble when it breaks a structure disables it (or when it's not spawned)
                         {
-                            transformPosition.y = -300; // arbitrary, allows for a parser to see -300 and just mark it as destroyed without making the format overly complex
+                            transform.position = new Vector3(0,-300,0); // arbitrary, allows for a parser to see -300 and just mark it as destroyed without making the format overly complex
                         } 
-                        objectUpdatePartialFrame.AddRange(BitConverter.GetBytes(transformPosition.x)); // Position X
-                        objectUpdatePartialFrame.AddRange(BitConverter.GetBytes(transformPosition.y)); // Position Y
-                        objectUpdatePartialFrame.AddRange(BitConverter.GetBytes(transformPosition.z)); // Position Z
-
                         
-                        objectUpdatePartialFrame.AddRange(BitConverter.GetBytes(transform.rotation.w)); // Rotation W
-                        objectUpdatePartialFrame.AddRange(BitConverter.GetBytes(transform.rotation.y)); // Position Y
-                        objectUpdatePartialFrame.AddRange(BitConverter.GetBytes(transform.rotation.x)); // Position X
-                        objectUpdatePartialFrame.AddRange(BitConverter.GetBytes(transform.rotation.z)); // Position Z
+                        objectUpdatePartialFrame.AddRange(SerializeTransform(transform));
+                        
                         }
                     } 
                 }
