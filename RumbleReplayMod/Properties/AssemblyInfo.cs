@@ -6,18 +6,18 @@ using MelonLoader;
 // The namespace of your mod class
 
 // ...
-[assembly: MelonInfo(typeof(RumbleReplayModClass), "RumbleReplayMod", "1.0.2", "blank")]
+[assembly: MelonInfo(typeof(RumbleReplayModClass), "RumbleReplay", "1.1.0", "blank")]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 [assembly: MelonAdditionalDependencies("RumbleModdingAPI")]
 [assembly: MelonColor(255, 255, 170, 238)] // #FAE pink :3
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RumbleReplayMod")]
+[assembly: AssemblyTitle("RumbleReplay")]
 [assembly: AssemblyDescription("Generates Replay Files for use in blender or other supported programs")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RumbleReplayMod")]
+[assembly: AssemblyProduct("RumbleReplay")]
 [assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
