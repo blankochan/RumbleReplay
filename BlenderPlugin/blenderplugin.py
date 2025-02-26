@@ -67,7 +67,7 @@ class GenerateAnim(bpy.types.Operator):
         headerLength:int = f.read(1)[0]
         Header:dict = json.loads(f.read(headerLength))
         print(Header)
-        if Header["Version"] != "1.0.0": self.report({'WARNINGZ'},"Mismatched replayfile version, should be fine")
+        if Header["Version"] != "1.0.2": self.report({'WARNING'},"Mismatched replayfile version, should be fine")
         generateAnimation(f)
 
         f.close()
