@@ -1,5 +1,4 @@
-
-
+Source code can be found [here](https://github.com/blankochan/RumbleReplay)
 # Playing a Replay
 
 Currently the only way to render replay files is Blender.
@@ -14,7 +13,7 @@ Prerequisites
 
 * A [Replay](#obtaining-a-replay) 
 
-* And [the Plugin](BlenderPlugin/blenderplugin.py?raw=true)
+* And [The Plugin](BlenderPlugin/blenderplugin.py?raw=true) (right click save as file if you dont want to clone the repo) 
 
 ---
 
