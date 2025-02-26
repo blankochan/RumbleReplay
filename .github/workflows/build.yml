@@ -1,0 +1,50 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Build RumbleReplayMod
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 6.0.x
+    
+    - name: Download RUMBLE Dependencies  
+      run: curl -O ${{secrets.REFERENCES}} # secret for potential copyright concerns
+    
+    - name: Extract Dependencies
+      run: unzip References.zip -d ./
+
+    - name: Change Working Directory to RumbleReplayMod
+      run: cd RumbleReplayMod
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+
+    - name: Restore Packages
+      run: nuget restore RumbleReplayMod.sln
+
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Collect Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: RumbleReplayMod.dll
+        path: RumbleReplayMod/bin/x64/Debug/RumbleReplayMod.dll
