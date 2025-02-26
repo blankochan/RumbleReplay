@@ -51,5 +51,5 @@ jobs:
     - name: Collect Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: RumbleReplayMod.dll
-        path: RumbleReplayMod/bin/x64/Debug/RumbleReplayMod.dll
+        name: RumbleReplay
+        path: RumbleReplayMod/bin/x64/${{ env.BUILD_CONFIG }}/RumbleReplayMod.dll
