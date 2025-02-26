@@ -2,7 +2,7 @@
     "name": "RumbleReplay",
     "version_number": "1.0.3",
     "website_url": "https://thunderstore.io/c/rumble/p/blanko/RumbleReplay",
-    "description": "Records rumble matches into a basic Replay format, see github for useage instructions",
+    "description": "Allows you to record your matches and play them back in blender",
     "dependencies": [
         "LavaGang-MelonLoader-0.7.0",
         "UlvakSkillz-RumbleModdingAPI-3.3.1"
