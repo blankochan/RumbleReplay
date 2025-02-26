@@ -28,13 +28,12 @@ jobs:
     - name: Extract Dependencies
       run: unzip References.zip -d ./
 
-    - name: Change Working Directory to RumbleReplayMod
-      run: cd RumbleReplayMod
-
     - name: Restore dependencies
+      working-directory: RumbleReplayMod
       run: dotnet restore
       
     - name: Build
+      working-directory: RumbleReplayMod
       run: dotnet build --no-restore
 
     - name: Collect Build Artifact
