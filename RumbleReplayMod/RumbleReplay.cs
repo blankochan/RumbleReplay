@@ -131,13 +131,13 @@ namespace RumbleReplay
         public override void OnSceneWasLoaded(int _, string sceneName)
         {
             if (Recording) StopReplay();    
-            CurrentScene = sceneName;
+            _currentScene = sceneName;
         }
         private void MapReady()
         {
-            if (CurrentScene != "Loader" && CurrentScene != "Park" && CurrentScene != "Gym")
+            if (_currentScene != "Loader" && _currentScene != "Park" && _currentScene != "Gym")
             {
-                LoggerInstance.Msg($"Loaded scene: {CurrentScene}");
+                LoggerInstance.Msg($"Loaded scene: {_currentScene}");
                 // Setup Pools Into our PoolObjects array
                 _poolObjects[0] = Calls.Pools.Structures.GetPoolBall();
                 _poolObjects[1] = Calls.Pools.Structures.GetPoolBoulderBall();
@@ -163,11 +163,12 @@ namespace RumbleReplay
 
                     }
                 }
+                
                 string localPlayer = Calls.Managers.GetPlayerManager().LocalPlayer?.Data.GeneralData.PublicUsername ?? "Unknown"; // should never happen but it might?
                 string remotePlayer = Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.GeneralData.PublicUsername ?? "Unknown";
                 LoggerInstance.Msg(localPlayer);
                 LoggerInstance.Msg(remotePlayer);
-                NewReplay(CurrentScene,Regex.Replace(localPlayer, "[^a-zA-Z0-9_ ]", ""),Regex.Replace(remotePlayer, "[^a-zA-Z0-9_ ]", ""));  
+                NewReplay(_currentScene,Regex.Replace(localPlayer, "[^a-zA-Z0-9_ ]", ""),Regex.Replace(remotePlayer, "[^a-zA-Z0-9_ ]", ""));  
             }
         }
 
