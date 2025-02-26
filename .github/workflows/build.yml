@@ -1,5 +1,7 @@
+
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
 
 name: Build RumbleReplayMod
 
@@ -13,28 +15,30 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-2025
 
     steps:
     - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '4.8.x'
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+    
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.2.0
     
     - name: Download RUMBLE Dependencies  
-      run: curl -O ${{secrets.REFERENCES}} # secret for potential copyright concerns
+      run: Invoke-WebRequest -Uri ${{secrets.REFERENCES}} -OutFile References.zip
     
     - name: Extract Dependencies
-      run: unzip References.zip -d ./
+      run: Expand-Archive -Path References.zip -DestinationPath ./ -Force
 
-    - name: Restore dependencies
+    - name: Restore NuGet packages
       working-directory: RumbleReplayMod
-      run: dotnet restore
-      
+      run: nuget restore
+
     - name: Build
       working-directory: RumbleReplayMod
-      run: dotnet build --no-restore
+      run: msbuild /p:Configuration=Debug /p:Platform=x64
 
     - name: Collect Build Artifact
       uses: actions/upload-artifact@v4
