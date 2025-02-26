@@ -259,7 +259,6 @@ namespace RumbleReplay
                 if (_writebuffer.Count >= 1000) //1kb of replay, arbitrary, TODO replace with more complicated more time based logic
                 {
                     _replayWriter.Write(_writebuffer.ToArray());
-                    //LoggerInstance.Msg($"Writing {_writebuffer.Count} bytes, Frame:{FrameCounter}");
                     _writebuffer.Clear();
                    
                 }
