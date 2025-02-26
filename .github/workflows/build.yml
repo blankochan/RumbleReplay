@@ -24,7 +24,7 @@ jobs:
     runs-on: windows-2025
     env:
       # Check if inputs.build_config exists (workflow_dispatch) or use Debug as fallback
-      BUILD_CONFIG: ${{ inputs.build_config || 'Debug' }}
+      BUILD_CONFIG: ${{ github.event_name == 'workflow_dispatch' && inputs.build_config || 'Debug' }}
     steps:
     - uses: actions/checkout@v4
     
@@ -46,7 +46,7 @@ jobs:
 
     - name: Build
       working-directory: RumbleReplayMod
-      run: msbuild /p:Configuration=${{ inputs.build_config }} /p:Platform=x64
+      run: msbuild /p:Configuration=${{ env.BUILD_CONFIG }} /p:Platform=x64
 
     - name: Collect Build Artifact
       uses: actions/upload-artifact@v4
