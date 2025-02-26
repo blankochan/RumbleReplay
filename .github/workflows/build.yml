@@ -15,8 +15,12 @@ on:
         type: string
   push:
     branches: [ "master" ]
+    paths: 
+     - 'RumbleReplayMod/**'
   pull_request:
     branches: [ "master" ]
+    paths: 
+     - 'RumbleReplayMod/**'
 
 jobs:
   build:
