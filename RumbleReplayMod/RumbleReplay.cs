@@ -92,7 +92,11 @@ namespace RumbleReplay
         }
         public void StopReplay()
         {
-            if (_replayFile == null) { return; }
+            if (_replayFile == null)
+            {
+                LoggerInstance.Warning("StopReplay with null replay file");
+                return;
+            }
             _replayWriter.Write(_writebuffer.ToArray());
             _writebuffer.Clear(); // Write Any Pending Data
             
