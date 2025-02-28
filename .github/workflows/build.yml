@@ -13,6 +13,13 @@ on:
         required: false
         default: 'Debug'
         type: string
+  workflow_call:
+    inputs:
+      build_config:
+        description: 'Build configuration (Debug/Release)'
+        required: false
+        default: 'Debug'
+        type: string
   push:
     branches: [ "master" ]
     paths: 
