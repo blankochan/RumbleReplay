@@ -10,6 +10,7 @@ jobs:
     with:
       build_config: Release
   release:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,11 +21,9 @@ jobs:
           name: RumbleReplay
           workflow: build.yml 
           workflow_conclusion: success 
-          path: artifact.zip
+          path: Release/Mods
       - name: Create directory
         run: mkdir Release
-      - name: Extract mod from artifact.zip
-        run: unzip artifact.zip -d Release/Mods
       - name: Fetch This Releases changelog 
         run: |
           CHANGELOG=$(awk '/^#/ {if (p) exit; p=1; next} p' CHANGELOG.md)
