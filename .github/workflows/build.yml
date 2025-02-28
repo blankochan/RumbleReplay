@@ -14,12 +14,11 @@ on:
         default: 'Debug'
         type: string
   workflow_call:
-    inputs:
-      references:
-        description: 'References url (required to make this action dependable)'
+    secrets:
+      REFERENCES:
+        description: "References secret"
         required: true
-        default: 'NoUrlSpecifed'
-        type: string
+    inputs:
       build_config:
         description: 'Build configuration (Debug/Release)'
         required: false
