@@ -15,6 +15,11 @@ on:
         type: string
   workflow_call:
     inputs:
+      references:
+        description: 'References url (required to make this action dependable)'
+        required: true
+        default: 'NoUrlSpecifed'
+        type: string
       build_config:
         description: 'Build configuration (Debug/Release)'
         required: false
