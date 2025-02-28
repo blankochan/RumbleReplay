@@ -9,12 +9,15 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       build_config: Release
+      references: ${{secrets.REFERENCES}}
   release:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Create directory
+        run: mkdir Release
       - name: Retrieve Build
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -22,8 +25,6 @@ jobs:
           workflow: build.yml 
           workflow_conclusion: success 
           path: Release/Mods
-      - name: Create directory
-        run: mkdir Release
       - name: Fetch This Releases changelog 
         run: |
           CHANGELOG=$(awk '/^#/ {if (p) exit; p=1; next} p' CHANGELOG.md)
