@@ -36,7 +36,8 @@ jobs:
           cp icon.png Release/icon.png
           cp CHANGELOG.md Release/CHANGELOG.md
       - name: Zip Release
-        run: zip -r RumbleReplay.zip Release
+        run: cd folder && zip -r ../RumbleReplay.zip ./*
+
       - name: Upload Release
         run: gh release create ${{ github.ref_name }} RumbleReplay.zip --title "Release ${{ github.ref_name }}" --notes-file releaseChanges.txt
         env:
