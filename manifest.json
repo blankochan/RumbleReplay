@@ -1,7 +1,7 @@
 {
     "name": "RumbleReplay",
-    "version_number": "1.1.0",
-    "website_url": "https://thunderstore.io/c/rumble/p/blanko/RumbleReplay",
+    "version_number": "1.1.1",
+    "website_url": "https://github.com/blankochan/RumbleReplay",
     "description": "Allows you to record your matches and play them back in blender",
     "dependencies": [
         "LavaGang-MelonLoader-0.7.0",
