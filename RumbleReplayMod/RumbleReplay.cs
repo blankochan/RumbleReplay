@@ -119,12 +119,12 @@ namespace RumbleReplay
         {
             _rumbleReplayPreferences = MelonPreferences.CreateCategory("RumbleReplaySettings");
             _rumbleReplayPreferences.SetFilePath(@"UserData/RumbleReplay.cfg");
-            _basicPlayerUpdateInterval = _rumbleReplayPreferences.CreateEntry("BasicPlayerUpdate_Interval", 4,description:"The interval we create updates for the players Hands and Head (will deprecate when better solution arises)");
+            _playerUpdateInterval = _rumbleReplayPreferences.CreateEntry("PlayerUpdate_Interval", 4,description:"The interval we create updates for the players Hands and Head");
             _basicStructureUpdateInterval = _rumbleReplayPreferences.CreateEntry("BasicStructureUpdate_Interval", 1,description:"the interval structure positions and rotations are updated (Leave at 1 for 1 update every physics frame, 2 for one update every 2 and so on)");
             _enabled = _rumbleReplayPreferences.CreateEntry("RecordingEnabled", true);
             _rumbleReplayPreferences.SaveToFile();
             
-            LoggerInstance.Msg($"BasicPlayerUpdate_Interval={_basicPlayerUpdateInterval.Value}");
+            LoggerInstance.Msg($"PlayerUpdate_Interval={_playerUpdateInterval.Value}");
             LoggerInstance.Msg($"BasicStructureUpdate_Interval={_basicStructureUpdateInterval.Value}");
             LoggerInstance.Msg($"Enabled {_enabled.Value}");
         }
@@ -194,61 +194,88 @@ namespace RumbleReplay
             }
         }
 
-        
+        private static List<Byte> _createPlayerUpdate()
+        {
+                        int index = 0;
+                        List<Byte> frame = new List<Byte>();
+                        foreach (Player player in Calls.Managers.GetPlayerManager().AllPlayers) // worth noting this doesn't instantly update so you can Null Reference despite IDE's saying its known not to be null
+                        {
+                            // remote player hitboxes start at 6 instead of 5 and ALlPlayers always starts at 0 for the local
+                            Transform head = player?.Controller.transform.GetChild(index > 0 ? 6 : 5).GetChild(4).transform ?? new Transform(); // head hitbox,
+                            // I don't fully remember why im using the hitbox, I think it was something along the lines of the quaternion rotation being broken with headset offset
+
+                            Transform spine = player?.Controller.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(4).transform ?? new Transform(); // Spine Bone; I fucking hate working with bones
+
+                            Transform leftHand = player?.Controller.transform.GetChild(1).GetChild(1).transform ?? new Transform(); // Left Controller
+                            Transform rightHand = player?.Controller.transform.GetChild(1).GetChild(2).transform ?? new Transform(); // Right Controller   
+
+
+                            // Actually toebones because its more helpful, because foot/heel will be inferred by IK if its wanted
+                            Transform leftFoot = player?.Controller.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform ?? new Transform();
+                            Transform rightFoot = player?.Controller.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(3).GetChild(0).GetChild(0).GetChild(0).transform ?? new Transform();
+
+
+                            frame.Add(((byte)index)); // PlayerId
+                            frame.AddRange(SerializeTransform(head));
+
+                            frame.AddRange(SerializeTransform(spine));
+
+                            // Hands
+                            frame.AddRange(SerializeTransform(leftHand));
+                            frame.AddRange(SerializeTransform(rightHand));
+
+                            // Feet
+                            frame.AddRange(SerializeTransform(leftFoot));
+                            frame.AddRange(SerializeTransform(rightFoot));
+                            index++;
+                        }
+                        return frame;
+        }
+
+        private List<Byte> _createBasicStructureUpdate()
+        {
+            List<Byte> frame = new List<Byte>();
+            for (UInt16 poolIndex = 0; poolIndex < _poolObjects.Length; poolIndex++)
+            {
+                var pool = _poolObjects[poolIndex];
+                for (UInt16 i = 0; i < _cullers[poolIndex].Length; i++)
+                {
+                    GameObject structure = pool.transform.GetChild(i).gameObject;
+                    if (_cullers[poolIndex][i] == structure.transform.position.GetHashCode()) 
+                    {
+                        continue;
+                    } 
+
+                    _cullers[poolIndex][i] = structure.transform.position.GetHashCode();
+
+                    frame.Add(((byte)poolIndex)); // Structure Type
+                    frame.Add(((byte)i)); // Object Index, there might be space savings here, but I don't know how to do that and its nicer looking this way.
+                    Transform transform = structure.transform; 
+                    if (!structure.active) // rumble when it breaks a structure disables it (or when it's not spawned)
+                    {
+                        transform.position = new Vector3(0,-300,0); // arbitrary, allows for a parser to see -300 and just mark it as destroyed without making the format overly complex
+                    } 
+                        
+                    frame.AddRange(SerializeTransform(transform));
+                        
+                }
+            }
+            return frame;
+        }
         
         public override void OnFixedUpdate()
         {
             if ( Recording )
             {
-                List<Byte> basicPlayerUpdatePartialFrame = new List<Byte>();
-                if (FrameCounter % _basicPlayerUpdateInterval.Value == 0) // my hack fix for every other frame
+                
+                List<byte> playerUpdateFrame = new List<byte>();
+                if (FrameCounter % _playerUpdateInterval.Value == 0) // my hack fix for every other frame
                 {
-                    int index = 0;
-                    foreach (Player player in Calls.Managers.GetPlayerManager().AllPlayers) // worth noting this doesn't instantly update so you can Null Reference 
-                    { 
-                         // remote player hitboxes start at 6 instead of 5 and ALlPlayers always starts at 0 for the local
-                         Transform headTransform = player?.Controller.transform.GetChild(index > 0 ? 6 : 5).GetChild(4).transform ?? new Transform(); // head hitbox,
-                         // I don't fully remember why im using the hitbox, I think it was something along the lines of the quaternion rotation being broken with headset offset
-                         Transform leftHandTransform = player?.Controller.transform.GetChild(1).GetChild(1).transform ?? new Transform(); // Left Controller
-                         Transform rightHandTransform = player?.Controller.transform.GetChild(1).GetChild(2).transform ?? new Transform(); // Right Controller   
-                            
-                         basicPlayerUpdatePartialFrame.Add(((byte)index)); // PlayerId
-                         
-                         basicPlayerUpdatePartialFrame.AddRange(SerializeTransform(headTransform));
-                         
-                         // Hands
-                         basicPlayerUpdatePartialFrame.AddRange(SerializeTransform(leftHandTransform));
-                         basicPlayerUpdatePartialFrame.AddRange(SerializeTransform(rightHandTransform));
-                         index++;
-                    }
+                         playerUpdateFrame.AddRange(_createPlayerUpdate());
                 }
                 List<Byte> objectUpdatePartialFrame = new List<Byte>();
                 if (FrameCounter % _basicStructureUpdateInterval.Value == 0){ 
-                    for (UInt16 poolIndex = 0; poolIndex < _poolObjects.Length; poolIndex++)
-                    {
-                        var pool = _poolObjects[poolIndex];
-                        for (UInt16 i = 0; i < _cullers[poolIndex].Length; i++)
-                        {
-                            GameObject structure = pool.transform.GetChild(i).gameObject;
-                        if (_cullers[poolIndex][i] == structure.transform.position.GetHashCode()) 
-                        {
-                            continue;
-                        } 
-
-                        _cullers[poolIndex][i] = structure.transform.position.GetHashCode();
-
-                        objectUpdatePartialFrame.Add(((byte)poolIndex)); // Structure Type
-                        objectUpdatePartialFrame.Add(((byte)i)); // Object Index, there might be space savings here, but I don't know how to do that and its nicer looking this way.
-                        Transform transform = structure.transform; 
-                        if (!structure.active) // rumble when it breaks a structure disables it (or when it's not spawned)
-                        {
-                            transform.position = new Vector3(0,-300,0); // arbitrary, allows for a parser to see -300 and just mark it as destroyed without making the format overly complex
-                        } 
-                        
-                        objectUpdatePartialFrame.AddRange(SerializeTransform(transform));
-                        
-                        }
-                    } 
+                    objectUpdatePartialFrame.AddRange(_createBasicStructureUpdate());
                 }
                 //Frame Header
                 if (objectUpdatePartialFrame.Count != 0)
@@ -259,12 +286,12 @@ namespace RumbleReplay
                     _writebuffer.AddRange(objectUpdatePartialFrame);
                 }
                 //Frame Header
-                if (basicPlayerUpdatePartialFrame.Count != 0)
+                if (playerUpdateFrame.Count != 0)
                 {
-                    _writebuffer.AddRange(BitConverter.GetBytes(((short)basicPlayerUpdatePartialFrame.Count))); // short in the event it's ever longer than 256 bytes, if a single frame takes 65,536 bytes something is probably wrong
+                    _writebuffer.AddRange(BitConverter.GetBytes(((short)playerUpdateFrame.Count))); // short in the event it's ever longer than 256 bytes, if a single frame takes 65,536 bytes something is probably wrong
                     _writebuffer.AddRange(BitConverter.GetBytes(FrameCounter));
-                    _writebuffer.Add(1); // BasicPlayerUpdate
-                    _writebuffer.AddRange(basicPlayerUpdatePartialFrame);
+                    _writebuffer.Add(2); // PlayerUpdate
+                    _writebuffer.AddRange(playerUpdateFrame);
                 }
                 FrameCounter++;
 
