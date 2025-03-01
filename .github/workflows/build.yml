@@ -21,8 +21,8 @@ on:
     inputs:
       build_config:
         description: 'Build configuration (Debug/Release)'
-        required: false
-        default: 'Debug'
+        required: true
+        default: 'Release'
         type: string
   push:
     branches: [ "master" ]

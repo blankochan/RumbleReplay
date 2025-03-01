@@ -10,7 +10,7 @@ jobs:
     secrets:
       REFERENCES: ${{secrets.REFERENCES}}
     with:
-      build_config: Release
+      build_config: 'Release'
   release:
     needs: build
     runs-on: ubuntu-latest
