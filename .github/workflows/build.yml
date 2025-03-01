@@ -39,7 +39,7 @@ jobs:
     runs-on: windows-2025
     env:
       # Check if inputs.build_config exists (workflow_dispatch) or use Debug as fallback
-      BUILD_CONFIG: ${{ github.event_name == 'workflow_dispatch' && inputs.build_config || 'Debug' }}
+      BUILD_CONFIG: ${{ inputs.build_config || 'Debug' }}
     steps:
     - uses: actions/checkout@v4
     
