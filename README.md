@@ -8,11 +8,11 @@ Currently the only way to render replay files is Blender.
 
 Prerequisites
 
-* The [Structures](BlenderPlugin/Structures.blend?raw=true) Blend file (you could use your own file if it's formatted right)
+* The [Structures](https://github.com/blankochan/RumbleReplay/blob/master/BlenderPlugin/Structures.blend?raw=true) Blend file (you could use your own file if it's formatted right)
 
 * A [Replay](#obtaining-a-replay) 
 
-* And [The Plugin](BlenderPlugin/blenderplugin.py?raw=true) (right click save as file if you dont want to clone the repo) 
+* And [The Plugin](https://github.com/blankochan/RumbleReplay/blob/master/BlenderPlugin/blenderplugin.py?raw=true) (right click save as file if you dont want to clone the repo) 
 
 ---
 
