@@ -1,5 +1,3 @@
-
-
 # Playing a Replay
 
 Currently the only way to render replay files is Blender.
@@ -10,7 +8,7 @@ Currently the only way to render replay files is Blender.
 
 Prerequisites
 
-* The [Structures](https://github.com/blankochan/RumbleReplay/blob/master/BlenderPlugin/Structures.blend?raw=true) Blend file (you could use your own file if it's formatted right, but this one has offsets and scales tuned forRumbleReplay
+* The [Structures](BlenderPlugin/Structures.blend?raw=true) Blend file (you could use your own file if it's formatted right)
 
 * A [Replay](#obtaining-a-replay) 
 
@@ -56,13 +54,21 @@ With the filename structure `{localPlayerName}-Vs-{remotePlayerName} On {map}-{R
 > [!Tip]
 > If you want to find the newest file you can right click in explorer and click Sort By and then Date modified
 
+# Known Issues
+
+- The Blender plugin is incredibly slow
+- There currently isn't a way to scale the player up or down (easily at least)
+- Objects and players hover sometimes (I've made Players and Objects parented to separate objects to hopefully make this easier to fix)
+- Sometimes rotations spaz out (as far as i can tell this is a unity giving me invalid data randomly)
+
+
 # Building
 
 ## Project Setup
 
 ### Create a References folder in your project directory
 
-### From RUMBLE/MelonLoader/Il2CppAssemblies copy to:References
+### From `RUMBLE/MelonLoader/Il2CppAssemblies` Copy
 
 - `Il2Cppmscorlib.dll`
 
@@ -78,7 +84,7 @@ With the filename structure `{localPlayerName}-Vs-{remotePlayerName} On {map}-{R
 
 - `UnityEngine.InputLegacyModule.dll` 
 
-### From `RUMBLE/MelonLoader/net6` 
+### From `RUMBLE/MelonLoader/net6` Copy
 
 * `Il2CppInterop.Common.dll`
 
@@ -94,6 +100,7 @@ With the filename structure `{localPlayerName}-Vs-{remotePlayerName} On {map}-{R
 
 > [!NOTE]
 > For those who wanna make their own recorders/parsers, or prepose changes or otherwise just understand the format
-> I have included an [ImHex Pattern](https://raw.githubusercontent.com/blankochan/RumbleReplay/refs/heads/master/v2RRparser.hexpat) that defines the structure of .rr files 
+> I have included an [ImHex Pattern](https://raw.githubusercontent.com/blankochan/RumbleReplay/refs/heads/master/v2RRparser.hexpat) that defines the general structure of `.rr` files 
 
 ###### Special thanks to SDRAWKCABMIAY for making the CRUMBLE font used in the logo
+###### And Thank you ulvak for the [RumbleModdingAPI](https://thunderstore.io/c/rumble/p/UlvakSkillz/RumbleModdingAPI/)
