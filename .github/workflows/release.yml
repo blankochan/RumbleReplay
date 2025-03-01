@@ -39,6 +39,6 @@ jobs:
         run: cd Release && zip -r ../RumbleReplay.zip ./*
 
       - name: Upload Release
-        run: gh release create ${{ github.ref_name }} RumbleReplay.zip --title "Release ${{ github.ref_name }}" --notes-file releaseChanges.txt
+        run: gh release create ${{ github.ref_name }} RumbleReplay.zip --title "${{ github.ref_name }}" --notes-file releaseChanges.txt
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
