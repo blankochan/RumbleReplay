@@ -30,7 +30,7 @@ jobs:
         run: awk '/^#/ {if (p) exit; p=1; next} p' CHANGELOG.md > releaseChanges.txt
       - name: create misc files for Release
         run: |
-          cp manifest.json Releases/manifest.json
+          cp manifest.json Release/manifest.json
           echo Source code can be found [here](https://github.com/blankochan/RumbleReplay) > Release/README.md
           cat README.md >> Release/README.md
           cp icon.png Release/icon.png
