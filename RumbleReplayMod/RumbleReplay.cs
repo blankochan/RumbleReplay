@@ -164,12 +164,25 @@ namespace RumbleReplay
 
                     }
                 }
+                var localPlayer = new ReplayPlayerData()
+                {
+                    Name = Regex.Replace(Calls.Managers.GetPlayerManager().LocalPlayer?.Data.GeneralData.PublicUsername ?? "Unknown","<.*?>|[^a-zA-Z0-9_ ]",""),
+                    Battlepoints = Calls.Managers.GetPlayerManager().LocalPlayer?.Data.GeneralData.BattlePoints ?? 0,
+                    PlayfabID = Calls.Managers.GetPlayerManager().LocalPlayer?.Data.GeneralData.PlayFabMasterId ?? "Unknown",
+                    Cosmetics = Calls.Managers.GetPlayerManager().LocalPlayer?.Data.visualData.ToPlayfabDataString() ?? PlayerVisualData.DefaultFemale.ToPlayfabDataString(),
+                };
+                var remotePlayer = new ReplayPlayerData()
+                {
+                    Name = Regex.Replace(Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.GeneralData.PublicUsername ?? "Unknown","<.*?>|[^a-zA-Z0-9_ ]",""),
+                    Battlepoints = Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.GeneralData.BattlePoints ?? 0,
+                    PlayfabID = Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.GeneralData.PlayFabMasterId ?? "Unknown",
+                    Cosmetics = Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.visualData.ToPlayfabDataString() ?? PlayerVisualData.DefaultFemale.ToPlayfabDataString(),
+                };
                 
-                string localPlayer = Calls.Managers.GetPlayerManager().LocalPlayer?.Data.GeneralData.PublicUsername ?? "Unknown"; // should never happen but it might?
-                string remotePlayer = Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.GeneralData.PublicUsername ?? "Unknown";
-                LoggerInstance.Msg(localPlayer);
-                LoggerInstance.Msg(remotePlayer);
-                NewReplay(_currentScene,Regex.Replace(localPlayer, "<.*?>|[^a-zA-Z0-9_ ]", ""),Regex.Replace(remotePlayer, "<.*?>|[^a-zA-Z0-9_ ]", ""));  
+                LoggerInstance.Msg(localPlayer.Name);
+                LoggerInstance.Msg(remotePlayer.Name);
+                
+                NewReplay(_currentScene,localPlayer,remotePlayer);  
             }
         }
 
