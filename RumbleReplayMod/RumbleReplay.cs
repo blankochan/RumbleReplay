@@ -30,12 +30,19 @@ namespace RumbleReplay
         private string _currentScene;
         FileStream _replayFile;
         BinaryWriter _replayWriter;
+        public sealed class ReplayPlayerData
+        {
+            public string Name = "Unknown";
+            public int Battlepoints;
+            public string PlayfabID = "Unknown";
+            public string Cosmetics = PlayerVisualData.DefaultFemale.ToPlayfabDataString(); // TODO find where Bucket head stores the enums for cosmetics so this string can be handy in places that arent rumble
+        }
         public sealed class ReplayHeader //ignore the warnings about unused variables it gets serialized by JsonConvert.SerializeObject
         {
-            public readonly string Version = "1.0.2";
-            public string EnemyName = "Unknown";
-            public string LocalName = "Unknown";
-            public string MapName = "Unknown";
+            public readonly string Version = "1.1.0";
+            public ReplayPlayerData LocalPlayer = new ReplayPlayerData();
+            public ReplayPlayerData RemotePlayer = new ReplayPlayerData();
+            public string Scene = "Unknown"; // TODO Integrate with The custom map mod (idr its name) to include the map name
             public readonly string Date = DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss");
         }
 
@@ -65,28 +72,28 @@ namespace RumbleReplay
 
             return buffer;
         }
-        public void NewReplay(string scene,string localPlayerName = "", string remotePlayerName = "")
+        public void NewReplay(string scene,ReplayPlayerData localPlayer, ReplayPlayerData remotePlayer)
         {
             if (!_enabled.Value){return;}
             
             
             ReplayHeader replayHeader = new ReplayHeader
             {
-                EnemyName = remotePlayerName,
-                LocalName = localPlayerName,
-                MapName = scene
+                LocalPlayer = localPlayer,
+                RemotePlayer = remotePlayer,
+                Scene = scene
             };
             string header = JsonConvert.SerializeObject(replayHeader);
             if (_replayFile != null) { StopReplay(); }
             LoggerInstance.Msg("Recording Started");
             if (!Directory.Exists("UserData/Replays")){ Directory.CreateDirectory("UserData/Replays"); }
-            _replayFile = File.Create($"UserData/Replays/{localPlayerName}-Vs-{remotePlayerName} On {scene}-{Path.GetRandomFileName()}.rr"); 
+            _replayFile = File.Create($"UserData/Replays/{localPlayer.Name}-Vs-{remotePlayer.Name} On {scene}-{Path.GetRandomFileName()}.rr"); 
 
             _replayWriter = new BinaryWriter(_replayFile);
             byte[] magicBytes = { 0x52, 0x52 }; // 'RR'
 
             _replayWriter.Write(magicBytes);
-            _replayWriter.Write((byte)header.Length);
+            _replayWriter.Write((short)header.Length);
             _replayWriter.Write(Encoding.UTF8.GetBytes(header)); // json header
             
             Recording = true; //should get ModUI support for starting/stopping at some point 
