@@ -27,9 +27,7 @@ jobs:
           workflow_conclusion: success 
           path: Release/Mods
       - name: Fetch This Releases changelog 
-        run: |
-          CHANGELOG=$(awk '/^#/ {if (p) exit; p=1; next} p' CHANGELOG.md)
-          echo "CHANGELOG=$CHANGELOG" >> $GITHUB_ENV
+        run: awk '/^#/ {if (p) exit; p=1; next} p' CHANGELOG.md > releaseChanges.txt
       - name: create misc files for Release
         run: |
           cp manifest.json Releases/manifest.json
@@ -40,6 +38,6 @@ jobs:
       - name: Zip Release
         run: zip -r RumbleReplay.zip Release
       - name: Upload Release
-        run: gh release create ${{ github.ref_name }} RumbleReplay.zip --title "Release ${{ github.ref_name }}" --notes "$CHANGELOG"
+        run: gh release create ${{ github.ref_name }} RumbleReplay.zip --title "Release ${{ github.ref_name }}" --notes-file releaseChanges.txt
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
