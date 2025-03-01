@@ -31,7 +31,7 @@ jobs:
       - name: create misc files for Release
         run: |
           cp manifest.json Release/manifest.json
-          echo "Source code can be found [here](https://github.com/blankochan/RumbleReplay)"" > Release/README.md
+          echo "Source code can be found [here](https://github.com/blankochan/RumbleReplay)" > Release/README.md
           cat README.md >> Release/README.md
           cp icon.png Release/icon.png
           cp CHANGELOG.md Release/CHANGELOG.md
