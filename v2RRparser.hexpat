@@ -2,7 +2,7 @@
 
 enum FrameType: u8{
 ObjectUpdate,
-BasicPlayerUpdate,
+PlayerUpdate=2,
 };
 
 struct Position{
@@ -29,7 +29,7 @@ enum StructureType: u8{
     SmallRock,
 };
 struct ObjectUpdate{
-StructureType Type;
+StructureType StructureType;
 u8 Index;
 Position;
 Rotation;
@@ -40,10 +40,20 @@ Position;
 Rotation;
 };
 
-struct BasicPlayerUpdate{
+struct Foot{
+Position;
+Rotation;
+};
+
+struct PlayerUpdate{
 u8 PlayerIndex;
 Position HeadPosition;
 Rotation HeadRotation;
+
+Position SpinePosition;
+Rotation SpineRotation;
+
+Foot feet[2];
 Hand Hands[2];
 };
 
@@ -53,12 +63,12 @@ struct FrameCasing{
  FrameType Type;
  match (Type){
  (FrameType::ObjectUpdate): ObjectUpdate updates[FrameLength/sizeof(ObjectUpdate)];
- (FrameType::BasicPlayerUpdate): BasicPlayerUpdate updates[FrameLength /sizeof(BasicPlayerUpdate)];
+ (FrameType::PlayerUpdate): PlayerUpdate updates[FrameLength /sizeof(PlayerUpdate)];
  (_): char UnsupportedUpdate[FrameLength];
  }
 };
 
 char MagicBytes[2] @ 0x0;
-u8 JsonLength @0x00+2;
-char JsonString[JsonLength] @0x0+3;
-FrameCasing Frames[3000] @ (JsonLength+3);
+u16 JsonLength @0x00+2;
+char JsonString[JsonLength] @0x0+4;
+FrameCasing Frames[11034] @ (JsonLength+4);

@@ -1,8 +1,7 @@
-
 import bpy
 from bpy_extras.io_utils import ImportHelper
 from bpy.types import Operator
-from mathutils import Quaternion,Euler
+from mathutils import Quaternion,Euler,Vector
 import math
 from enum import Enum
 from typing import Tuple
@@ -30,7 +29,7 @@ class StructureTypeEnum(Enum):
 
 class FrameTypeEnum(Enum): # when we have other types this will be helpful for readablity
     ObjectUpdate = 0
-    BasicPlayerUpdate = 1
+    PlayerUpdate = 2
 
 class VIEW3D_PT_rumblereplay(bpy.types.Panel): #side panel
     bl_space_type = "VIEW_3D"
@@ -65,9 +64,15 @@ class GenerateAnim(bpy.types.Operator):
             self.report({'ERROR'},"Not a valid RumbleReplay file.")
             return {'FINISHED'}
         headerLength:int = f.read(1)[0]
-        Header:dict = json.loads(f.read(headerLength))
-        print(Header)
-        if Header["Version"] != "1.0.2": self.report({'WARNING'},"Mismatched replayfile version, should be fine")
+        if f.peek(1) != ord('{'):
+            f.seek(-1,1)
+            headerLength = struct.unpack('<H',f.read(2))[0]
+            Header:dict = json.loads(f.read(headerLength))
+            print(Header)
+            if Header["Version"] != "1.1.0": self.report({'WARNING'},"Mismatched replayfile version, should be fine")
+        else:
+            self.report({'WARNING'},"Replay Before 1.1.0, unsupported")
+
         generateAnimation(f)
 
         f.close()
@@ -91,12 +96,23 @@ class SetupScene(bpy.types.Operator):
         WorldParent.name = "World"
         WorldParent.rotation_euler = Euler((math.radians(90),0,0))
 
+        bpy.ops.object.empty_add(type='PLAIN_AXES')
+        PlayerParent:bpy.types.Object = bpy.data.objects["Empty"]
+        PlayerParent.name = "Players"
+        PlayerParent.rotation_euler = Euler((math.radians(90),0,0))
 
-        for i in range(5):
+
+        for i in range(15):
+            print(i)
             bpy.ops.object.empty_add(type='CUBE')
-            Player:bpy.types.Object = bpy.data.objects["Empty"]
-            Player.name = f"Player.{str(i).zfill(3)}"
-            Player.scale = [0.2,0.2,0.2]
+            head:bpy.types.Object = bpy.data.objects["Empty"]
+            head.name = f"Head.{str(i).zfill(3)}"
+            head.scale = [0.2,0.2,0.2]
+
+            bpy.ops.object.empty_add(type='CUBE')
+            spine:bpy.types.Object = bpy.data.objects["Empty"]
+            spine.name = f"Spine.{str(i).zfill(3)}"
+            spine.scale = [0.2,0.2,0.1]
 
             bpy.ops.object.empty_add(type='CUBE')
             handLeft:bpy.types.Object = bpy.data.objects["Empty"]
@@ -108,14 +124,25 @@ class SetupScene(bpy.types.Operator):
             handRight.name = f"Hand.{str(i).zfill(3)}.R"
             handRight.scale = [0.1,0.1,0.2]
 
-            Pool.objects.link(Player)
+            bpy.ops.object.empty_add(type='CUBE')
+            footLeft:bpy.types.Object = bpy.data.objects["Empty"]
+            footLeft.name = f"Foot.{str(i).zfill(3)}.L"
+            footLeft.scale = [0.1,0.15,0.1]
 
-            Pool.objects.link(handLeft)
-            Pool.objects.link(handRight)
+            bpy.ops.object.empty_add(type='CUBE')
+            footRight:bpy.types.Object = bpy.data.objects["Empty"]
+            footRight.name = f"Foot.{str(i).zfill(3)}.R"
+            footRight.scale = [0.1,0.15,0.1]
 
-            handLeft.parent = WorldParent
-            handRight.parent = WorldParent
-            Player.parent = WorldParent
+            head.parent = PlayerParent
+            
+            spine.parent = PlayerParent
+
+            handLeft.parent = PlayerParent
+            handRight.parent = PlayerParent
+
+            footLeft.parent = PlayerParent
+            footRight.parent = PlayerParent
 
         #Pool.objects.link(ArrowParent)
 
@@ -125,6 +152,7 @@ class SetupScene(bpy.types.Operator):
                 new_obj.data = obj.data.copy() 
                 Pool.objects.link(new_obj)
                 new_obj.parent = WorldParent
+        bpy.context.scene.render.fps = 50
         return {'FINISHED'}
     
 class OT_OpenFilebrowser(Operator, ImportHelper):
@@ -153,9 +181,16 @@ def generateAnimation(f:BufferedReader):
 
     bpy.context.scene.frame_end = FrameCounter
 
+    bpy.data.objects["World"].scale = (-1,1,1)
+    bpy.data.objects["Players"].scale = (-1,1,1)
+    
+    for player in bpy.data.objects["Players"].children:
+        player:bpy.types.Object = player
+        if not player.animation_data:
+            bpy.data.objects.remove(player, do_unlink=True)
+
     for obj in bpy.data.objects["World"].children: # cull anything that didnt end up getting animated
         obj:bpy.types.Object = obj
-        bpy.data.objects["World"].scale = (-1,1,1)
         if not obj.animation_data:
             bpy.data.objects.remove(obj, do_unlink=True)
             
@@ -207,13 +242,17 @@ def ParseObjectUpdate(f:BufferedReader,FrameLength:int, FrameCounter:int,FrameTy
         obj.keyframe_insert(data_path="location", frame=FrameCounter, index=-1)
         obj.keyframe_insert(data_path="rotation_quaternion", frame=FrameCounter, index=-1)
 
-def ParseBasicPlayerUpdate(f:BufferedReader,FrameLength:int, FrameCounter:int,FrameType:int):
-    for _ in range(int(FrameLength/85)):
+def ParsePlayerUpdate(f:BufferedReader,FrameLength:int, FrameCounter:int,FrameType:int):
+    for _ in range(int(FrameLength/169)):
         PLAYER_INDEX:int = f.read(1)[0]
         HEAD_POSITION:Tuple[float,float,float] = struct.unpack("<3f",f.read(12))
         w,y,x,z =struct.unpack("<4f",f.read(16))
         HEAD_ROTATION:Quaternion = Quaternion((w,x,y,z))
         
+        CHEST_POSITION:Tuple[float,float,float] = struct.unpack("<3f",f.read(12))
+        w,y,x,z =struct.unpack("<4f",f.read(16))
+        CHEST_ROTATION:Quaternion = Quaternion((w,x,y,z))
+
         HAND_LEFT_POSITION:Tuple[float,float,float] = struct.unpack("<3f",f.read(12))
         w,y,x,z =struct.unpack("<4f",f.read(16))
         HAND_LEFT_ROTATION:Quaternion = Quaternion((w,x,y,z))
@@ -222,22 +261,40 @@ def ParseBasicPlayerUpdate(f:BufferedReader,FrameLength:int, FrameCounter:int,Fr
         w,y,x,z =struct.unpack("<4f",f.read(16))
         HAND_RIGHT_ROTATION:Quaternion = Quaternion((w,x,y,z))
 
-        
 
-        OBJECT_NAME:str = f"Player.{str(PLAYER_INDEX).zfill(3)}" #should output something like Player.001
+        FOOT_LEFT_POSITION:Tuple[float,float,float] = struct.unpack("<3f",f.read(12))
+        w,y,x,z =struct.unpack("<4f",f.read(16))
+        FOOT_LEFT_ROTATION:Quaternion = Quaternion((w,x,y,z))
+
+        FOOT_RIGHT_POSITION:Tuple[float,float,float] = struct.unpack("<3f",f.read(12))
+        w,y,x,z =struct.unpack("<4f",f.read(16))
+        FOOT_RIGHT_ROTATION:Quaternion = Quaternion((w,x,y,z))
+
+
 
         try:
-            obj:bpy.types.Object = bpy.data.objects[OBJECT_NAME]
+            head:bpy.types.Object = bpy.data.objects[f"Head.{str(PLAYER_INDEX).zfill(3)}"]
+
+            chest:bpy.types.Object = bpy.data.objects[f"Spine.{str(PLAYER_INDEX).zfill(3)}"]
+
             leftHand:bpy.types.Object = bpy.data.objects[f"Hand.{str(PLAYER_INDEX).zfill(3)}.L"]
             rightHand:bpy.types.Object = bpy.data.objects[f"Hand.{str(PLAYER_INDEX).zfill(3)}.R"]
-        except:
-            print(OBJECT_NAME,":PlayerNotFound@",f.tell())
+
+            leftFoot:bpy.types.Object = bpy.data.objects[f"Foot.{str(PLAYER_INDEX).zfill(3)}.L"]
+            rightFoot:bpy.types.Object = bpy.data.objects[f"Foot.{str(PLAYER_INDEX).zfill(3)}.R"]
+        except Exception as e:
+            print(f"Player.{str(PLAYER_INDEX).zfill(3)}",":PlayerNotFound@",f.tell())
+            print(e)
             continue # should call if its an object we dont have an object for, isnt a big deal like 99% of time 
 
 
-        obj.location = HEAD_POSITION
-        obj.rotation_mode = "QUATERNION"
-        obj.rotation_quaternion = HEAD_ROTATION
+        head.location = HEAD_POSITION
+        head.rotation_mode = "QUATERNION"
+        head.rotation_quaternion = HEAD_ROTATION
+
+        chest.location = CHEST_POSITION
+        chest.rotation_mode = "QUATERNION"
+        chest.rotation_quaternion = CHEST_ROTATION
 
         leftHand.location = HAND_LEFT_POSITION
         leftHand.rotation_mode = "QUATERNION"
@@ -247,8 +304,19 @@ def ParseBasicPlayerUpdate(f:BufferedReader,FrameLength:int, FrameCounter:int,Fr
         rightHand.rotation_mode = "QUATERNION"
         rightHand.rotation_quaternion = HAND_RIGHT_ROTATION
 
-        obj.keyframe_insert(data_path="location", frame=FrameCounter, index=-1)
-        obj.keyframe_insert(data_path="rotation_quaternion", frame=FrameCounter, index=-1)
+        leftFoot.location = FOOT_LEFT_POSITION
+        leftFoot.rotation_mode = "QUATERNION"
+        leftFoot.rotation_quaternion = FOOT_LEFT_ROTATION
+
+        rightFoot.location = FOOT_RIGHT_POSITION
+        rightFoot.rotation_mode = "QUATERNION"
+        rightFoot.rotation_quaternion = FOOT_RIGHT_ROTATION
+
+        head.keyframe_insert(data_path="location", frame=FrameCounter, index=-1)
+        head.keyframe_insert(data_path="rotation_quaternion", frame=FrameCounter, index=-1)
+
+        chest.keyframe_insert(data_path="location", frame=FrameCounter, index=-1)
+        chest.keyframe_insert(data_path="rotation_quaternion", frame=FrameCounter, index=-1)
 
         leftHand.keyframe_insert(data_path="location", frame=FrameCounter, index=-1)
         leftHand.keyframe_insert(data_path="rotation_quaternion", frame=FrameCounter, index=-1)
@@ -256,12 +324,18 @@ def ParseBasicPlayerUpdate(f:BufferedReader,FrameLength:int, FrameCounter:int,Fr
         rightHand.keyframe_insert(data_path="location", frame=FrameCounter, index=-1)
         rightHand.keyframe_insert(data_path="rotation_quaternion", frame=FrameCounter, index=-1)
 
+        leftFoot.keyframe_insert(data_path="location", frame=FrameCounter, index=-1)
+        leftFoot.keyframe_insert(data_path="rotation_quaternion", frame=FrameCounter, index=-1)
+
+        rightFoot.keyframe_insert(data_path="location", frame=FrameCounter, index=-1)
+        rightFoot.keyframe_insert(data_path="rotation_quaternion", frame=FrameCounter, index=-1)
+
 def parseframes(f:BufferedReader,FrameLength:int, FrameCounter:int,FrameType:int) -> bool:
     match FrameType:
         case FrameTypeEnum.ObjectUpdate.value:
             ParseObjectUpdate(f,FrameLength, FrameCounter,FrameType)
-        case FrameTypeEnum.BasicPlayerUpdate.value:
-            ParseBasicPlayerUpdate(f,FrameLength, FrameCounter,FrameType)
+        case FrameTypeEnum.PlayerUpdate.value:
+            ParsePlayerUpdate(f,FrameLength, FrameCounter,FrameType)
         case _: # unsupported type
             f.read(FrameLength)
             print(FrameType, ":Unsupported FrameType@",f.tell())
@@ -269,7 +343,7 @@ def parseframes(f:BufferedReader,FrameLength:int, FrameCounter:int,FrameType:int
                 print("EOF?@",f.tell()) 
                 return False
             else: return True
-
+# might be redundant but too lazy to check
     if not f.peek(5):
         print("EOF?@",f.tell()) 
         return False
