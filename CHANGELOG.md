@@ -1,3 +1,6 @@
+# 1.1.1
+- Forgot that relative links wouldnt work on thunderstore
+
 # 1.1.0
 - Added github actions to allow more tech savy users to quickly get an unreleased verison
 - Automated generating releases to make my life easier
