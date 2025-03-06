@@ -39,7 +39,7 @@ namespace RumbleReplay
         }
         public sealed class ReplayHeader //ignore the warnings about unused variables it gets serialized by JsonConvert.SerializeObject
         {
-            public readonly string Version = "1.1.0";
+            public readonly string Version = BuildInfo.Version;
             public ReplayPlayerData LocalPlayer = new ReplayPlayerData();
             public ReplayPlayerData RemotePlayer = new ReplayPlayerData();
             public string Scene = "Unknown"; // TODO Integrate with The custom map mod (idr its name) to include the map name

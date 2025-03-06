@@ -3,10 +3,11 @@ using System.Runtime.InteropServices;
 using RumbleReplay;
 using MelonLoader;
 
+
 // The namespace of your mod class
 
 // ...
-[assembly: MelonInfo(typeof(RumbleReplayModClass), "RumbleReplay", "1.1.0", "blank")]
+[assembly: MelonInfo(typeof(RumbleReplayModClass), BuildInfo.Name, BuildInfo.Version, BuildInfo.Author)]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 [assembly: MelonAdditionalDependencies("RumbleModdingAPI")]
 [assembly: MelonColor(255, 255, 170, 238)] // #FAE pink :3
@@ -37,5 +38,5 @@ using MelonLoader;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion(BuildInfo.Version)]
+[assembly: AssemblyFileVersion(BuildInfo.Version)]
