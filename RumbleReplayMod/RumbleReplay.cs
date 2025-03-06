@@ -90,7 +90,7 @@ namespace RumbleReplay
             _replayFile = File.Create($"UserData/Replays/{localPlayer.Name}-Vs-{remotePlayer.Name} On {scene}-{Path.GetRandomFileName()}.rr"); 
 
             _replayWriter = new BinaryWriter(_replayFile);
-            byte[] magicBytes = { 0x52, 0x52 }; // 'RR'
+            byte[] magicBytes = [0x52, 0x52]; // 'RR'
 
             _replayWriter.Write(magicBytes);
             _replayWriter.Write((short)header.Length);
