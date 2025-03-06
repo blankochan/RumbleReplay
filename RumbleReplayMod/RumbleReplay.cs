@@ -28,8 +28,8 @@ namespace RumbleReplay
         public bool Recording;
         public Int16 FrameCounter;
         private string _currentScene;
-        FileStream _replayFile;
-        BinaryWriter _replayWriter;
+        private FileStream _replayFile;
+        private BinaryWriter _replayWriter;
         public sealed class ReplayPlayerData
         {
             public string Name = "Unknown";
