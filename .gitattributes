@@ -2,4 +2,4 @@
 *.hexpat            linguist-language=Rust
 
 *.pat       text diff=rust
-*.hexpat       text diff=rust
+*.hexpat    text diff=rust
