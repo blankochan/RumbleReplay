@@ -1,0 +1,5 @@
+*.pat               linguist-language=Rust
+*.hexpat            linguist-language=Rust
+
+*.pat       text diff=rust
+*.hexpat       text diff=rust
