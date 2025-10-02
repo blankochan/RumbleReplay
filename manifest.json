@@ -1,10 +1,10 @@
 {
     "name": "RumbleReplay",
-    "version_number": "1.1.1",
+    "version_number": "1.1.3",
     "website_url": "https://github.com/blankochan/RumbleReplay",
     "description": "Allows you to record your matches and play them back in blender",
     "dependencies": [
-        "LavaGang-MelonLoader-0.7.0",
-        "UlvakSkillz-RumbleModdingAPI-3.3.1"
+        "LavaGang-MelonLoader-0.7.1",
+        "UlvakSkillz-RumbleModdingAPI-4.0.2"
     ]
 }
