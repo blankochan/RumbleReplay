@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Il2CppRUMBLE.Players;
+using Il2CppRUMBLE.Players.Scaling;
 using Il2CppSystem.Text;
 using MelonLoader;
 using Newtonsoft.Json;
@@ -176,14 +177,14 @@ namespace RumbleReplay
                     Name = Regex.Replace(Calls.Managers.GetPlayerManager().LocalPlayer?.Data.GeneralData.PublicUsername ?? "Unknown","<.*?>|[^a-zA-Z0-9_ ]",""),
                     Battlepoints = Calls.Managers.GetPlayerManager().LocalPlayer?.Data.GeneralData.BattlePoints ?? 0,
                     PlayfabID = Calls.Managers.GetPlayerManager().LocalPlayer?.Data.GeneralData.PlayFabMasterId ?? "Unknown",
-                    Cosmetics = Calls.Managers.GetPlayerManager().LocalPlayer?.Data.visualData.ToPlayfabDataString() ?? PlayerVisualData.DefaultFemale.ToPlayfabDataString(),
+                    Cosmetics = Calls.Managers.GetPlayerManager().LocalPlayer?.Data.VisualData.ToPlayfabDataString() ?? PlayerVisualData.DefaultFemale.ToPlayfabDataString(),
                 };
                 var remotePlayer = new ReplayPlayerData()
                 {
                     Name = Regex.Replace(Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.GeneralData.PublicUsername ?? "Unknown","<.*?>|[^a-zA-Z0-9_ ]",""),
                     Battlepoints = Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.GeneralData.BattlePoints ?? 0,
                     PlayfabID = Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.GeneralData.PlayFabMasterId ?? "Unknown",
-                    Cosmetics = Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.visualData.ToPlayfabDataString() ?? PlayerVisualData.DefaultFemale.ToPlayfabDataString(),
+                    Cosmetics = Calls.Players.GetEnemyPlayers().FirstOrDefault()?.Data.VisualData.ToPlayfabDataString() ?? PlayerVisualData.DefaultFemale.ToPlayfabDataString(),
                 };
                 
                 LoggerInstance.Msg(localPlayer.Name);
@@ -207,19 +208,20 @@ namespace RumbleReplay
                         List<Byte> frame = new List<Byte>();
                         foreach (Player player in Calls.Managers.GetPlayerManager().AllPlayers) // worth noting this doesn't instantly update so you can Null Reference despite IDE's saying its known not to be null
                         {
+                            RigDefinition bones = player?.Controller.GetComponentInChildren<RigDefinition>();
                             // remote player hitboxes start at 6 instead of 5 and ALlPlayers always starts at 0 for the local
-                            Transform head = player?.Controller.transform.GetChild(index > 0 ? 6 : 5).GetChild(4).transform ?? new Transform(); // head hitbox,
+                            Transform head = bones.headDefinition.Transform; // head hitbox,
                             // I don't fully remember why im using the hitbox, I think it was something along the lines of the quaternion rotation being broken with headset offset
 
-                            Transform spine = player?.Controller.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(4).transform ?? new Transform(); // Spine Bone; I fucking hate working with bones
+                            Transform spine = bones.spineDefinition.Transform; // Spine Bone; I fucking hate working with bones
 
-                            Transform leftHand = player?.Controller.transform.GetChild(1).GetChild(1).transform ?? new Transform(); // Left Controller
-                            Transform rightHand = player?.Controller.transform.GetChild(1).GetChild(2).transform ?? new Transform(); // Right Controller   
+                            Transform leftHand = bones.leftHandDefinition.Transform; // Left Controller
+                            Transform rightHand = bones.rightHandDefinition.Transform; // Right Controller   
 
 
                             // Actually toebones because its more helpful, because foot/heel will be inferred by IK if its wanted
-                            Transform leftFoot = player?.Controller.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(0).transform ?? new Transform();
-                            Transform rightFoot = player?.Controller.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(3).GetChild(0).GetChild(0).GetChild(0).transform ?? new Transform();
+                            Transform leftFoot = bones.leftFootDefinition.Transform;
+                            Transform rightFoot = bones.rightFootDefinition.Transform;
 
 
                             frame.Add(((byte)index)); // PlayerId
