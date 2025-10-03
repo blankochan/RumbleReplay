@@ -20,7 +20,7 @@ jobs:
       - name: Create directory
         run: mkdir Release
       - name: Retrieve Build
-        uses: dawidd6/action-download-artifact@v6
+        uses: dawidd6/action-download-artifact@v11
         with:
           name: RumbleReplay
           workflow: build.yml 
