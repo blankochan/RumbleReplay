@@ -1,3 +1,5 @@
+# 1.1.3
+- MatsuNoKi has kindly made an update to fix RumbleReplay until i have the time and energy to give it the love and attention it deserves 
 # 1.1.1
 - Forgot that relative links wouldnt work on thunderstore
 
